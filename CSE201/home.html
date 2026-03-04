@@ -8,5 +8,28 @@
 <h1>Welcome 🎶</h1>
 <p>You are logged in!</p>
 
+<ul id="song-list"></ul>
+
+<script src="music-player/MusicService.js"></script>
+
+<script>
+function displayMusic() {
+    const listElement = document.getElementById("song-list");
+    const playlist = musicService.getPlaylist(); 
+
+    playlist.forEach(song => {
+        let li = document.createElement("li");
+        // Updated to use your database fields: genre and mood!
+        li.innerHTML = `
+            <strong>${song.title}</strong> by ${song.artist} 
+            <br><small>Genre: ${song.genre} | Mood: ${song.mood}</small>
+        `;
+        listElement.appendChild(li);
+    });
+}
+
+window.onload = displayMusic;
+</script>
+
 </body>
 </html>
