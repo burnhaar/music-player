@@ -1,38 +1,104 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Register</title>
+<meta charset="UTF-8">
+<title>Register</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #1e3c72, #2a5298);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.card {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    width: 350px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 20px;
+    color: #2a5298;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background: #2a5298;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #1e3c72;
+}
+
+a {
+    color: #2a5298;
+    text-decoration: none;
+}
+</style>
 </head>
+
 <body>
 
-<h1>Create Account 🎵</h1>
+<div class="card">
+    <h1>Create Account 🎵</h1>
 
-<form onsubmit="return registerUser()">
-    <label>Username:</label><br>
-    <input type="text" id="newUsername" required><br><br>
+    <form onsubmit="return registerUser()">
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button type="submit">Sign Up</button>
+    </form>
 
-    <label>Password:</label><br>
-    <input type="password" id="newPassword" required><br><br>
+    <p id="message" style="color:red;"></p>
 
-    <button type="submit">Register</button>
-</form>
-
-<p id="message"></p>
+    <p>Already have an account? <a href="index.html">Log in</a></p>
+</div>
 
 <script>
 function registerUser() {
-    let username = document.getElementById("newUsername").value;
-    let password = document.getElementById("newPassword").value;
+    let username = document.getElementById("username").value;
+    let password = document.getElementById("password").value;
 
-    if (localStorage.getItem(username)) {
-        document.getElementById("message").innerText = "Username already taken!";
-        return false;
-    }
+    fetch("http://localhost:8080/api/users/register", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            username: username,
+            password: password
+        })
+    })
+    .then(res => res.text())
+    .then(data => {
 
-    localStorage.setItem(username, password);
-    alert("Account created! You can now log in.");
-    window.location.href = "index.html";
+        if (data === "Registration successful") {
+            alert("Account created!");
+            window.location.href = "index.html";
+        } else {
+            document.getElementById("message").innerText = data;
+        }
+
+    });
+
     return false;
 }
 </script>
