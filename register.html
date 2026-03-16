@@ -79,19 +79,24 @@ function registerUser() {
     let username = document.getElementById("username").value;
     let password = document.getElementById("password").value;
 
-    fetch("http://localhost:8080/api/register", {
+    fetch("http://localhost:8080/api/users/register", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({
+            username: username,
+            password: password
+        })
     })
-    .then(res => res.json())
+    .then(res => res.text())
     .then(data => {
-        if (data.success) {
-            alert("Account created! Please log in.");
+
+        if (data === "Registration successful") {
+            alert("Account created!");
             window.location.href = "index.html";
         } else {
-            document.getElementById("message").innerText = "Username already exists!";
+            document.getElementById("message").innerText = data;
         }
+
     });
 
     return false;

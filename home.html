@@ -67,7 +67,7 @@ if (!currentUser) {
 
 // Load user's library from Spring Boot
 function loadLibrary() {
-    fetch("http://localhost:8080/api/library/" + currentUser)
+    fetch("http://localhost:8080/api/songs")
     .then(res => res.json())
     .then(data => {
         let libraryDiv = document.getElementById("library");
@@ -118,7 +118,24 @@ function logout() {
     window.location.href = "index.html";
 }
 
-loadLibrary();
+function loadLibrary() {
+    fetch("http://localhost:8080/api/songs")
+    .then(res => res.json())
+    .then(data => {
+
+        let libraryDiv = document.getElementById("library");
+        libraryDiv.innerHTML = "";
+
+        data.forEach(song => {
+            libraryDiv.innerHTML += `
+                <div class="song">
+                    ${song.title} - ${song.artist}
+                </div>
+            `;
+        });
+
+    });
+}
 
 </script>
 </body>
