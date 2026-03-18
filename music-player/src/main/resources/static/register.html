@@ -81,7 +81,7 @@ function registerUser() {
     let password = document.getElementById("password").value;
     
 
-    fetch("http://keen-energy-production-769f.up.railway.app/api/users/register", {
+    fetch("https://keen-energy-production-769f.up.railway.app/api/users/register", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({

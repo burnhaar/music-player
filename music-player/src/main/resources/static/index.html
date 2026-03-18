@@ -79,7 +79,7 @@ function loginUser() {
     let username = document.getElementById("username").value;
     let password = document.getElementById("password").value;
 
-    fetch("http://keen-energy-production-769f.up.railway.app/api/users/login", {
+    fetch("https://keen-energy-production-769f.up.railway.app/api/users/login", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
@@ -92,7 +92,7 @@ function loginUser() {
         console.log("Server said:", data);
         if (data.trim() === "Login successful") {
             localStorage.setItem("currentUser", username);
-            window.location.replace("http://keen-energy-production-769f.up.railway.app/home.html");
+            window.location.replace("https://keen-energy-production-769f.up.railway.app/home.html");
         } else {
             document.getElementById("message").innerText = data;
         }

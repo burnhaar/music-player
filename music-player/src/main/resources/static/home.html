@@ -63,14 +63,14 @@ button:hover {
 let currentUser = localStorage.getItem("currentUser");
 
 if (!currentUser) {
-    window.location.href = "http://keen-energy-production-769f.up.railway.app/index.html";
+    window.location.href = "https://keen-energy-production-769f.up.railway.app/index.html";
 }
 
 // ===== Load all songs on page load =====
 window.onload = loadLibrary;  // ← MOVED HERE, outside the function
 
 function loadLibrary() {
-    fetch("http://keen-energy-production-769f.up.railway.app/api/songs")
+    fetch("https://keen-energy-production-769f.up.railway.app/api/songs")
     .then(res => res.json())
     .then(data => {
         let libraryDiv = document.getElementById("library");
@@ -111,7 +111,7 @@ function searchLibrary() {
         return;
     }
 
-    fetch("http://keen-energy-production-769f.up.railway.app/api/songs/title/" + encodeURIComponent(query))
+    fetch("https-production-769f.up.railway.app/api/songs/title/" + encodeURIComponent(query))
     .then(res => res.json())
     .then(data => {
         let libraryDiv = document.getElementById("library");
@@ -150,7 +150,7 @@ function goToProfile() {
 
 function logout() {
     localStorage.removeItem("currentUser");
-    window.location.href = "http://keen-energy-production-769f.up.railway.app/index.html";
+    window.location.href = "https://keen-energy-production-769f.up.railway.app/index.html";
 }
 
 </script>
