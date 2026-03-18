@@ -92,7 +92,7 @@ function loginUser() {
         console.log("Server said:", data);
         if (data.trim() === "Login successful") {
             localStorage.setItem("currentUser", username);
-            window.location.replace("https://authentic-hope-production.up.railway.app/home.html");
+            window.location.replace("https://keen-energy-production-769f.up.railway.app/home.html");
         } else {
             document.getElementById("message").innerText = data;
         }

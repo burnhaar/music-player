@@ -81,7 +81,7 @@ function registerUser() {
     let password = document.getElementById("password").value;
     
 
-    fetch("http://localhost:8080/api/users/register", {
+    fetch("https://authentic-hope-production.up.railway.app/api/users/register", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
