@@ -43,6 +43,13 @@ public class Song implements Comparable<Song> {
         this.setImageBase64(imageBase64);
     }
 
+    public Song(String title, String artist, String genre, String mood) {
+    this.title = title;
+    this.artist = artist;
+    this.genre = genre;
+    this.mood = mood;
+}
+
     // ============ METHODS ============
     /**
      * This method formats the song into a neat String

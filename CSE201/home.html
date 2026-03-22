@@ -10,22 +10,60 @@
 
 <ul id="song-list"></ul>
 
-<script src="music-player/MusicService.js"></script>
 
 <script>
-function displayMusic() {
+async function displayMusic() {
     const listElement = document.getElementById("song-list");
-    const playlist = musicService.getPlaylist(); 
+    // Grab the username we saved during login!
+    const currentUser = sessionStorage.getItem("loggedInUser");
 
-    playlist.forEach(song => {
-        let li = document.createElement("li");
-        // Updated to use your database fields: genre and mood!
-        li.innerHTML = `
-            <strong>${song.title}</strong> by ${song.artist} 
-            <br><small>Genre: ${song.genre} | Mood: ${song.mood}</small>
-        `;
-        listElement.appendChild(li);
-    });
+    try {
+        const response = await fetch("http://localhost:8080/api/songs");
+        const songs = await response.json();
+
+        listElement.innerHTML = ""; 
+
+        songs.forEach(song => {
+            let li = document.createElement("li");
+            li.style.borderBottom = "1px solid #ccc";
+            li.style.padding = "10px";
+            li.style.listStyle = "none";
+            
+            li.innerHTML = `
+                <div>
+                    <strong>${song.title}</strong> - ${song.artist}
+                    <br><small>${song.genre} | ${song.mood}</small>
+                </div>
+                <button onclick="favoriteSong('${song.id}')" style="margin-top:5px;">
+                    ❤️ Favorite
+                </button>
+            `;
+            listElement.appendChild(li);
+        });
+    } catch (error) {
+        console.error("Error:", error);
+        listElement.innerHTML = "<li>Error loading songs. Is Java running?</li>";
+    }
+}
+async function favoriteSong(songId) {
+    const username = sessionStorage.getItem("loggedInUser");
+    
+    if (!username) {
+        alert("Please login first!");
+        return;
+    }
+
+    try {
+        // This hits the @PostMapping in your SongController that calls SongService
+        const response = await fetch(`http://localhost:8080/api/songs/favorite?username=${username}&songId=${songId}`, {
+            method: 'POST'
+        });
+
+        const message = await response.text();
+        alert(message); // Should say "Song favorited."
+    } catch (error) {
+        console.log("Error favoriting:", error);
+    }
 }
 
 window.onload = displayMusic;

@@ -7,32 +7,58 @@
 
 <h1>Create Account 🎵</h1>
 
-<form onsubmit="return registerUser()">
+<form id="regForm">
     <label>Username:</label><br>
     <input type="text" id="newUsername" required><br><br>
 
     <label>Password:</label><br>
     <input type="password" id="newPassword" required><br><br>
 
-    <button type="submit">Register</button>
+    <button type="button" onclick="registerUser()">Register</button>
 </form>
 
-<p id="message"></p>
+<p id="message" style="color: red; font-weight: bold;"></p>
 
 <script>
-function registerUser() {
+async function registerUser() {
+    console.log("Button clicked! Function is running...");
+    
     let username = document.getElementById("newUsername").value;
     let password = document.getElementById("newPassword").value;
+    let msg = document.getElementById("message");
 
-    if (localStorage.getItem(username)) {
-        document.getElementById("message").innerText = "Username already taken!";
-        return false;
+    if (!username || !password) {
+        msg.innerText = "Please fill in both fields.";
+        return;
     }
 
-    localStorage.setItem(username, password);
-    alert("Account created! You can now log in.");
-    window.location.href = "index.html";
-    return false;
+    const userData = {
+        username: username,
+        password: password,
+        email: username + "@email.com" 
+    };
+
+    try {
+        console.log("Sending data to Java...");
+        const response = await fetch('http://localhost:8080/api/users/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(userData)
+        });
+
+        const text = await response.text();
+        console.log("Java says:", text);
+
+        if (text.toLowerCase().includes("successful")) {
+            alert("Success! Going to login...");
+            window.location.href = "index.html"; 
+        } else {
+            msg.innerText = text;
+        }
+    } catch (error) {
+        console.error("Connection Error:", error);
+        msg.innerText = "Error: Java Server is offline!";
+    }
 }
 </script>
 
