@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <title>Login</title>
 
+
+
+
 <style>
 body {
     margin: 0;
@@ -83,7 +86,10 @@ document.getElementById("loginBtn").addEventListener("click", function() {
         return;
     }
 
-    fetch("https://music-player-m56j.onrender.com/api/users/login", {
+
+    const BACKEND_URL = "https://music-player-m56j.onrender.com/login";
+    
+    fetch(BACKEND_URL, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
@@ -91,19 +97,28 @@ document.getElementById("loginBtn").addEventListener("click", function() {
             password: password
         })
     })
-    .then(res => res.text())
+    .then(async res => {
+        if (res.ok) {
+            return res.text();
+        } else {
+            const errorData = await res.text();
+            throw new Error(errorData || "Login failed");
+        }
+    })
     .then(data => {
-        console.log("Server said:", data);
-        if (data.trim() === "Login successful") {
+        console.log("Server response:", data);
+
+        if (data.toLowerCase().includes("successful")) {
             localStorage.setItem("currentUser", username);
-            window.location.href = "home.html";
+            
+            window.location.href = "home.html"; 
         } else {
             document.getElementById("message").innerText = data;
         }
     })
     .catch(err => {
-        console.error(err);
-        document.getElementById("message").innerText = "Connection error.";
+        console.error("Login Error:", err);
+        document.getElementById("message").innerText = "Connection error. Is the backend running?";
     });
 });
 </script>
