@@ -3,6 +3,7 @@ package com.musicplayer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -88,4 +89,19 @@ public class UserService {
         userRepository.deleteById(user.getId());
         return "User " + username + " deleted.";
     }
+
+    public String updateUsername(String oldUsername, String newUsername) {
+    if (userRepository.findByUsername(newUsername) != null) return "Username already taken.";
+    User user = userRepository.findByUsername(oldUsername);
+    if (user == null) return "User not found.";
+    user.setUsername(newUsername);
+    userRepository.save(user);
+    return "Username updated.";
+}
+
+public List<String> getFriends(String username) {
+    User user = userRepository.findByUsername(username);
+    if (user == null) return new ArrayList<>();
+    return user.getFriends() != null ? user.getFriends() : new ArrayList<>();
+}
 }

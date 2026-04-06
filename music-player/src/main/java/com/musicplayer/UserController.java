@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/users")
@@ -36,4 +37,16 @@ public class UserController {
     public String loginUser(@RequestBody User loginUser) {
         return userService.loginUser(loginUser.getUsername(), loginUser.getPassword());
     }
+
+    // Change username
+@PutMapping("/{username}/username")
+public String updateUsername(@PathVariable String username, @RequestBody Map<String, String> body) {
+    return userService.updateUsername(username, body.get("newUsername"));
+}
+
+// Get friends list
+@GetMapping("/{username}/friends")
+public List<String> getFriends(@PathVariable String username) {
+    return userService.getFriends(username);
+}
 }

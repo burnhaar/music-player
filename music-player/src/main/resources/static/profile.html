@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Profile</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0d;
+    --surface: #161616;
+    --surface2: #1f1f1f;
+    --border: #2a2a2a;
+    --accent: #4f8ef7;
+    --accent2: #a78bfa;
+    --text: #f0f0f0;
+    --muted: #888;
+    --danger: #f87171;
+    --success: #34d399;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* NAVBAR */
+  .navbar {
+    background: #111;
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .navbar-brand {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: var(--accent);
+    letter-spacing: -0.5px;
+  }
+  .navbar-actions button {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 7px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    margin-left: 8px;
+    transition: all 0.2s;
+  }
+  .navbar-actions button:hover { background: var(--border); }
+  .navbar-actions button.danger { color: var(--danger); border-color: var(--danger)33; }
+  .navbar-actions button.danger:hover { background: var(--danger)22; }
+
+  /* MAIN LAYOUT */
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+
+  /* PROFILE HEADER */
+  .profile-header {
+    display: flex;
+    gap: 48px;
+    align-items: flex-start;
+    margin-bottom: 40px;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* AVATAR */
+  .avatar-wrap {
+    position: relative;
+    flex-shrink: 0;
+  }
+  .avatar {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--border);
+    display: block;
+    background: var(--surface2);
+  }
+  .avatar-placeholder {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent)44, var(--accent2)44);
+    border: 3px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--accent);
+  }
+  .avatar-edit-btn {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg);
+    color: white;
+    font-size: 0.75rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+  }
+  .avatar-edit-btn:hover { transform: scale(1.1); }
+  #avatarInput { display: none; }
+
+  /* PROFILE INFO */
+  .profile-info { flex: 1; }
+  .username-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .username-display {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+  .edit-username-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 5px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+  .edit-username-btn:hover { color: var(--text); border-color: var(--accent); }
+
+  /* EDIT USERNAME FORM */
+  .edit-username-form {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .edit-username-form.active { display: flex; }
+  .edit-username-form input {
+    background: var(--surface2);
+    border: 1px solid var(--accent);
+    color: var(--text);
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    width: 200px;
+  }
+  .edit-username-form button {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    transition: opacity 0.2s;
+  }
+  .btn-save { background: var(--accent); color: white; }
+  .btn-cancel { background: var(--surface2); color: var(--muted); border: 1px solid var(--border) !important; }
+  .edit-username-form button:hover { opacity: 0.85; }
+  #editMsg { font-size: 0.8rem; margin-top: 4px; }
+
+  /* STATS ROW */
+  .stats-row {
+    display: flex;
+    gap: 32px;
+    margin-bottom: 16px;
+  }
+  .stat { text-align: center; cursor: default; }
+  .stat.clickable { cursor: pointer; }
+  .stat.clickable:hover .stat-label { color: var(--accent); }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+  }
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    transition: color 0.2s;
+  }
+
+  /* DIVIDER */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 32px 0;
+  }
+
+  /* FRIENDS SECTION */
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  .friends-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 16px;
+  }
+
+  .friend-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    animation: fadeUp 0.4s ease both;
+  }
+  .friend-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(79,142,247,0.12);
+  }
+  .friend-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent)55, var(--accent2)55);
+    margin: 0 auto 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--accent);
+    overflow: hidden;
+  }
+  .friend-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .friend-name {
+    font-size: 0.85rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.active { display: flex; }
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    width: 90%;
+    max-width: 420px;
+    animation: fadeUp 0.3s ease both;
+    position: relative;
+  }
+  .modal-close {
+    position: absolute;
+    top: 16px; right: 16px;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 1.3rem;
+    cursor: pointer;
+    line-height: 1;
+  }
+  .modal-close:hover { color: var(--text); }
+  .modal-avatar {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent)55, var(--accent2)55);
+    margin: 0 auto 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 1.6rem; font-weight: 700; color: var(--accent);
+    overflow: hidden;
+  }
+  .modal-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .modal-username {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.3rem; font-weight: 700;
+    text-align: center; margin-bottom: 20px;
+  }
+  .modal-stats {
+    display: flex; gap: 24px; justify-content: center;
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+  }
+
+  /* EMPTY STATE */
+  .empty {
+    color: var(--muted);
+    font-size: 0.9rem;
+    padding: 32px;
+    text-align: center;
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+  }
+
+  /* LOADING */
+  .loading { color: var(--muted); font-size: 0.9rem; padding: 20px 0; }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 24px; left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    z-index: 300;
+    transition: transform 0.3s ease;
+    pointer-events: none;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.success { border-color: var(--success); color: var(--success); }
+  .toast.error { border-color: var(--danger); color: var(--danger); }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <div class="navbar-brand">🎵 MusicPlayer</div>
+  <div class="navbar-actions">
+    <button onclick="window.location.href='home.html'">← Library</button>
+    <button onclick="window.location.href='songs.html'">Browse</button>
+    <button class="danger" onclick="logout()">Logout</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+  <!-- PROFILE HEADER -->
+  <div class="profile-header">
+
+    <!-- AVATAR -->
+    <div class="avatar-wrap">
+      <div class="avatar-placeholder" id="avatarPlaceholder">?</div>
+      <img class="avatar" id="avatarImg" style="display:none;" src="" alt="avatar">
+      <div class="avatar-edit-btn" onclick="document.getElementById('avatarInput').click()" title="Change photo">✏️</div>
+      <input type="file" id="avatarInput" accept="image/*" onchange="handleAvatarChange(event)">
+    </div>
+
+    <!-- INFO -->
+    <div class="profile-info">
+
+      <!-- USERNAME ROW -->
+      <div class="username-row" id="usernameRow">
+        <span class="username-display" id="usernameDisplay">Loading...</span>
+        <button class="edit-username-btn" onclick="toggleEditUsername()">Edit username</button>
+      </div>
+
+      <!-- EDIT FORM -->
+      <div class="edit-username-form" id="editUsernameForm">
+        <input type="text" id="newUsernameInput" placeholder="New username">
+        <button class="btn-save" onclick="saveUsername()">Save</button>
+        <button class="btn-cancel" onclick="toggleEditUsername()">Cancel</button>
+      </div>
+      <p id="editMsg"></p>
+
+      <!-- STATS -->
+      <div class="stats-row">
+        <div class="stat">
+          <div class="stat-num" id="songCount">—</div>
+          <div class="stat-label">songs saved</div>
+        </div>
+        <div class="stat clickable" onclick="scrollToFriends()">
+          <div class="stat-num" id="friendCount">—</div>
+          <div class="stat-label">friends</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- FRIENDS -->
+  <div id="friendsSection">
+    <div class="section-title">Friends</div>
+    <div class="friends-grid" id="friendsGrid">
+      <div class="loading">Loading friends...</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FRIEND PROFILE MODAL -->
+<div class="modal-overlay" id="friendModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeFriendModal()">✕</button>
+    <div class="modal-avatar" id="modalAvatar"></div>
+    <div class="modal-username" id="modalUsername"></div>
+    <div class="modal-stats">
+      <div class="stat">
+        <div class="stat-num" id="modalSongs">—</div>
+        <div class="stat-label">songs saved</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" id="modalFriends">—</div>
+        <div class="stat-label">friends</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+const BASE = "https://music-player-m56j.onrender.com";
+let currentUser = localStorage.getItem("currentUser");
+
+if (!currentUser) window.location.href = "index.html";
+
+// ===== INIT =====
+window.onload = async function() {
+  document.getElementById("usernameDisplay").textContent = currentUser;
+  document.getElementById("avatarPlaceholder").textContent = currentUser.charAt(0).toUpperCase();
+  document.getElementById("newUsernameInput").value = currentUser;
+
+  loadAvatar();
+  loadSongCount();
+  loadFriends();
+};
+
+// ===== AVATAR =====
+function loadAvatar() {
+  const saved = localStorage.getItem("avatar_" + currentUser);
+  if (saved) {
+    showAvatar(saved);
+  }
+}
+
+function showAvatar(src) {
+  const img = document.getElementById("avatarImg");
+  const placeholder = document.getElementById("avatarPlaceholder");
+  img.src = src;
+  img.style.display = "block";
+  placeholder.style.display = "none";
+}
+
+function handleAvatarChange(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const dataUrl = e.target.result;
+    localStorage.setItem("avatar_" + currentUser, dataUrl);
+    showAvatar(dataUrl);
+    showToast("Profile picture updated!", "success");
+
+    // TODO: upload to backend
+    // fetch(`${BASE}/api/users/${currentUser}/avatar`, { method: "POST", body: formData })
+  };
+  reader.readAsDataURL(file);
+}
+
+// ===== SONG COUNT =====
+function loadSongCount() {
+  fetch(`${BASE}/api/songs`)
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById("songCount").textContent = data.length;
+    })
+    .catch(() => {
+      document.getElementById("songCount").textContent = "—";
+    });
+}
+
+// ===== FRIENDS =====
+function loadFriends() {
+  fetch(`${BASE}/api/users/${currentUser}/friends`)
+    .then(res => {
+      if (!res.ok) throw new Error();
+      return res.json();
+    })
+    .then(friends => {
+      document.getElementById("friendCount").textContent = friends.length;
+      renderFriends(friends);
+    })
+    .catch(() => {
+      // Fallback: show all users as "friends" if no friends endpoint yet
+      fetch(`${BASE}/api/users`)
+        .then(res => res.json())
+        .then(users => {
+          const others = users.filter(u => u.username !== currentUser);
+          document.getElementById("friendCount").textContent = others.length;
+          renderFriends(others.map(u => u.username));
+        })
+        .catch(() => {
+          document.getElementById("friendsGrid").innerHTML = '<div class="empty">No friends found.</div>';
+        });
+    });
+}
+
+function renderFriends(friends) {
+  const grid = document.getElementById("friendsGrid");
+  if (!friends || friends.length === 0) {
+    grid.innerHTML = '<div class="empty">No friends yet.</div>';
+    return;
+  }
+
+  grid.innerHTML = friends.map((f, i) => {
+    const name = typeof f === "string" ? f : f.username;
+    const initial = name.charAt(0).toUpperCase();
+    const savedAvatar = localStorage.getItem("avatar_" + name);
+    const avatarHtml = savedAvatar
+      ? `<img src="${savedAvatar}" alt="${name}">`
+      : initial;
+
+    return `
+      <div class="friend-card" style="animation-delay:${i * 0.05}s" onclick="openFriendModal('${name}')">
+        <div class="friend-avatar">${avatarHtml}</div>
+        <div class="friend-name">${name}</div>
+      </div>
+    `;
+  }).join("");
+}
+
+// ===== FRIEND MODAL =====
+function openFriendModal(username) {
+  document.getElementById("modalUsername").textContent = username;
+  const initial = username.charAt(0).toUpperCase();
+  const savedAvatar = localStorage.getItem("avatar_" + username);
+  const avatarEl = document.getElementById("modalAvatar");
+  avatarEl.innerHTML = savedAvatar ? `<img src="${savedAvatar}" alt="${username}">` : initial;
+
+  document.getElementById("modalSongs").textContent = "—";
+  document.getElementById("modalFriends").textContent = "—";
+
+  document.getElementById("friendModal").classList.add("active");
+
+  // Load their song count
+  fetch(`${BASE}/api/songs`)
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById("modalSongs").textContent = data.length;
+    }).catch(() => {});
+
+  // Load their friends count
+  fetch(`${BASE}/api/users/${username}/friends`)
+    .then(res => res.json())
+    .then(friends => {
+      document.getElementById("modalFriends").textContent = friends.length;
+    }).catch(() => {});
+}
+
+function closeFriendModal() {
+  document.getElementById("friendModal").classList.remove("active");
+}
+
+// Close modal on overlay click
+document.getElementById("friendModal").addEventListener("click", function(e) {
+  if (e.target === this) closeFriendModal();
+});
+
+// ===== EDIT USERNAME =====
+function toggleEditUsername() {
+  const form = document.getElementById("editUsernameForm");
+  const row = document.getElementById("usernameRow");
+  const isActive = form.classList.contains("active");
+
+  form.classList.toggle("active");
+  row.style.display = isActive ? "flex" : "none";
+  document.getElementById("editMsg").textContent = "";
+
+  if (!isActive) {
+    document.getElementById("newUsernameInput").value = currentUser;
+    document.getElementById("newUsernameInput").focus();
+  }
+}
+
+function saveUsername() {
+  const newUsername = document.getElementById("newUsernameInput").value.trim();
+  const msgEl = document.getElementById("editMsg");
+
+  if (!newUsername) { msgEl.style.color = "var(--danger)"; msgEl.textContent = "Username cannot be empty."; return; }
+  if (newUsername === currentUser) { toggleEditUsername(); return; }
+
+  fetch(`${BASE}/api/users/${currentUser}/username`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ newUsername })
+  })
+  .then(res => res.text())
+  .then(data => {
+    if (data.toLowerCase().includes("success") || data.toLowerCase().includes("updated")) {
+      // Transfer avatar to new username key
+      const avatar = localStorage.getItem("avatar_" + currentUser);
+      if (avatar) {
+        localStorage.setItem("avatar_" + newUsername, avatar);
+        localStorage.removeItem("avatar_" + currentUser);
+      }
+      localStorage.setItem("currentUser", newUsername);
+      currentUser = newUsername;
+      document.getElementById("usernameDisplay").textContent = newUsername;
+      document.getElementById("avatarPlaceholder").textContent = newUsername.charAt(0).toUpperCase();
+      toggleEditUsername();
+      showToast("Username updated!", "success");
+    } else {
+      msgEl.style.color = "var(--danger)";
+      msgEl.textContent = data;
+    }
+  })
+  .catch(() => {
+    msgEl.style.color = "var(--danger)";
+    msgEl.textContent = "Error updating username.";
+  });
+}
+
+// ===== HELPERS =====
+function scrollToFriends() {
+  document.getElementById("friendsSection").scrollIntoView({ behavior: "smooth" });
+}
+
+function logout() {
+  localStorage.removeItem("currentUser");
+  window.location.href = "index.html";
+}
+
+function showToast(msg, type = "") {
+  const toast = document.getElementById("toast");
+  toast.textContent = msg;
+  toast.className = "toast show " + type;
+  setTimeout(() => toast.className = "toast " + type, 3000);
+}
+</script>
+
+</body>
+</html>
