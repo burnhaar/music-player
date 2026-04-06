@@ -93,7 +93,7 @@ function registerUser() {
     .then(res => res.text())
     .then(data => {
 
-        if (data === "Registration successful") {
+        if (data === "Registration successful.") {
             alert("Account created!");
             window.location.href = "index.html";
         } else {
