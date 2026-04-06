@@ -83,7 +83,7 @@ document.getElementById("loginBtn").addEventListener("click", function() {
         return;
     }
 
-    fetch("https://201-project-production.up.railway.app/api/users/login", {
+    fetch("https://music-player-m56j.onrender.com/api/users/login", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
@@ -96,7 +96,7 @@ document.getElementById("loginBtn").addEventListener("click", function() {
         console.log("Server said:", data);
         if (data.trim() === "Login successful") {
             localStorage.setItem("currentUser", username);
-            window.location.href = "https://201-project-production.up.railway.app/home.html";
+            window.location.href = "https://music-player-m56j.onrender.com/home.html";
         } else {
             document.getElementById("message").innerText = data;
         }
