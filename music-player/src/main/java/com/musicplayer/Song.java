@@ -14,6 +14,7 @@ public class Song implements Comparable<Song> {
     private String genre;
     private String mood;
     private String dateReleased;
+    private boolean isFavorite;
     private String imageBase64;
 
     // ============ CONSTRUCTORS ============
@@ -34,12 +35,13 @@ public class Song implements Comparable<Song> {
      * @param dateReleased
      * @param imageBased64
      */
-    public Song(String title, String artist, String genre, String mood, String dateReleased, String imageBase64) {
+    public Song(String title, String artist, String genre, String mood, String dateReleased, boolean isFavorite, String imageBase64) {
         this.setTitle(title);
         this.setArtist(artist);
         this.setGenre(genre);
         this.setMood(mood);
         this.setDateReleased(dateReleased);
+        this.setIsFavorite(isFavorite);
         this.setImageBase64(imageBase64);
     }
 
@@ -164,4 +166,11 @@ public class Song implements Comparable<Song> {
         this.imageBase64 = imageBase64;
     }
 
+    public boolean getIsFavorite() {
+        return isFavorite;
+    }
+
+    public void setIsFavorite(boolean isFavorite) {
+        this.isFavorite = isFavorite;
+    }
 }

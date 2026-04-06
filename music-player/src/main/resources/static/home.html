@@ -5,154 +5,220 @@
     <meta charset="UTF-8">
     <title>Home</title>
     <style>
-body {
-    margin: 0;
-    font-family: Arial;
-    background-color: #121212;
-    color: white;
-}
+        body {
+            margin: 0;
+            font-family: Arial;
+            background-color: #121212;
+            color: white;
+        }
 
-.navbar {
-    background: #2a5298;
-    padding: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+        .navbar {
+            background: #2a5298;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-button {
-    padding: 6px 12px;
-    cursor: pointer;
-    border: none;
-    border-radius: 6px;
-}
+        button {
+            padding: 6px 12px;
+            cursor: pointer;
+            border: none;
+            border-radius: 6px;
+        }
 
-button:hover {
-    opacity: 0.8;
-}
+        button:hover {
+            opacity: 0.8;
+        }
 
-.song {
-    background: #1e1e1e;
-    margin: 10px 0;
-    padding: 15px;
-    border-radius: 8px;
-}
+        .song {
+            background: #1e1e1e;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .song {
+            position: relative;
+            /* ADD this to the existing .song rule */
+        }
+
+        .fav-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.15s ease;
+            padding: 0;
+            z-index: 10;
+        }
+
+        .fav-btn:hover {
+            transform: scale(1.2);
+            opacity: 1;
+        }
     </style>
 </head>
+
 <body>
 
-<div class="navbar">
-    <h2>🎵 My Library</h2>
-    <div>
-        <button onclick="window.location.href='songs.html'">Browse Songs</button>
-        <button onclick="goToProfile()">Profile</button>
-        <button onclick="logout()">Logout</button>
+    <div class="navbar">
+        <h2>🎵 My Library</h2>
+        <div>
+            <button onclick="window.location.href='songs.html'">Browse Songs</button>
+            <button onclick="goToProfile()">Profile</button>
+            <button onclick="logout()">Logout</button>
+        </div>
     </div>
-</div>
 
-<div style="padding:20px;">
-    <input type="text" id="search" placeholder="Search your library..." 
-           onkeyup="searchLibrary()" style="padding:8px; width:60%;">
-</div>
+    <div style="padding:20px;">
+        <input type="text" id="search" placeholder="Search your library..." onkeyup="searchLibrary()"
+            style="padding:8px; width:60%;">
+    </div>
 
-<h3 style="padding-left:20px;">Saved Songs</h3>
-<div id="library" style="padding:20px;">Loading...</div>
+    <h3 style="padding-left:20px;">Saved Songs</h3>
+    <div id="library" style="padding:20px;">Loading...</div>
 
-<script>
+    <script>
 
-let currentUser = localStorage.getItem("currentUser");
+        let currentUser = localStorage.getItem("currentUser");
 
-if (!currentUser) {
-    window.location.href = "https://music-player-m56j.onrender.com/index.html";
-}
-
-// ===== Load all songs on page load =====
-window.onload = loadLibrary;  // ← MOVED HERE, outside the function
-
-function loadLibrary() {
-    fetch("https://music-player-m56j.onrender.com/api/songs")
-    .then(res => res.json())
-    .then(data => {
-        let libraryDiv = document.getElementById("library");
-        libraryDiv.innerHTML = "";
-
-        if (!data || data.length === 0) {
-            libraryDiv.innerHTML = "<p>No songs found.</p>";
-            return;
+        if (!currentUser) {
+            window.location.href = "https://music-player-m56j.onrender.com/index.html";
         }
 
-        data.forEach(song => {
-            libraryDiv.innerHTML += `
-                <div class="song">
-                    ${song.imageBase64
-                        ? `<img src="data:image/jpeg;base64,${song.imageBase64}" 
-                            style="width:100%;height:120px;object-fit:cover;border-radius:6px;">`
-                        : `<div style="height:120px;background:#333;border-radius:6px;
-                            display:flex;align-items:center;justify-content:center;
-                            color:#888;">No Image</div>`}
-                    <strong>${song.title}</strong><br>
-                    <span style="color:#aaa;">${song.artist} · ${song.genre} · ${song.mood}</span>
-                </div>
-            `;
-        });
-    })
-    .catch(err => {
-        document.getElementById("library").innerHTML = "Failed to load songs.";
-        console.error(err);
-    });
-}
+        // ===== Load all songs on page load =====
+        window.onload = loadLibrary;  // ← MOVED HERE, outside the function
 
-// ===== Search songs =====
-function searchLibrary() {
-    let query = document.getElementById("search").value.toLowerCase();
+        function loadLibrary() {
+            fetch("https://music-player-m56j.onrender.com/api/songs")
+                .then(res => res.json())
+                .then(data => {
+                    let libraryDiv = document.getElementById("library");
+                    libraryDiv.innerHTML = "";
 
-    if (query === "") {
-        loadLibrary();
-        return;
-    }
+                    if (!data || data.length === 0) {
+                        libraryDiv.innerHTML = "<p>No songs found.</p>";
+                        return;
+                    }
 
-    fetch("https://music-player-m56j.onrender.com/api/songs/title/" + encodeURIComponent(query))
-    .then(res => res.json())
-    .then(data => {
-        let libraryDiv = document.getElementById("library");
-        libraryDiv.innerHTML = "";
+                    data.forEach(song => {
+                    libraryDiv.innerHTML += `
+                        <div class="song">
+                            <button 
+                                class="fav-btn ${song.isFavorite ? 'active' : 'inactive'}" 
+                                onclick="toggleFavorite('${song.id}', this)"
+                            >
+                                ${song.isFavorite ? '❤️' : '🤍'}
+                            </button>
+                            ${song.imageBase64
+                                ? `<img src="data:image/jpeg;base64,${song.imageBase64}" 
+                                    style="width:100%;height:120px;object-fit:cover;border-radius:6px;">`
+                                : `<div style="height:120px;background:#333;border-radius:6px;
+                                    display:flex;align-items:center;justify-content:center;
+                                    color:#888;">No Image</div>`}
+                            <strong>${song.title}</strong><br>
+                            <span style="color:#aaa;">${song.artist} · ${song.genre} · ${song.mood}</span>
+                        </div>
+                    `;
 
-        let filtered = data.filter(song =>
-            song.title.toLowerCase().includes(query) ||
-            song.artist.toLowerCase().includes(query)
-        );
-
-        if (filtered.length === 0) {
-            libraryDiv.innerHTML = "<p>No songs found.</p>";
-            return;
+                    });
+                })
+                .catch(err => {
+                    document.getElementById("library").innerHTML = "Failed to load songs.";
+                    console.error(err);
+                });
         }
 
-        filtered.forEach(song => {
-            libraryDiv.innerHTML += `
-                <div class="song">
-                    ${song.imageBase64
-                        ? `<img src="data:image/jpeg;base64,${song.imageBase64}" 
-                            style="width:100%;height:120px;object-fit:cover;border-radius:6px;">`
-                        : `<div style="height:120px;background:#333;border-radius:6px;
-                            display:flex;align-items:center;justify-content:center;
-                            color:#888;">No Image</div>`}
-                    <strong>${song.title}</strong><br>
-                    <span style="color:#aaa;">${song.artist} · ${song.genre} · ${song.mood}</span>
-                </div>
-            `;
-        });
-    });
-}
+        // ===== Search songs =====
+        function searchLibrary() {
+            let query = document.getElementById("search").value.toLowerCase();
 
-function goToProfile() {
-    window.location.href = "profile.html";
-}
+            if (query === "") {
+                loadLibrary();
+                return;
+            }
 
-function logout() {
-    localStorage.removeItem("currentUser");
-    window.location.href = "https://music-player-m56j.onrender.com/index.html";
-}
+            fetch("https://music-player-m56j.onrender.com/api/songs/title/" + encodeURIComponent(query))
+                .then(res => res.json())
+                .then(data => {
+                    let libraryDiv = document.getElementById("library");
+                    libraryDiv.innerHTML = "";
 
-</script>
+                    let filtered = data.filter(song =>
+                        song.title.toLowerCase().includes(query) ||
+                        song.artist.toLowerCase().includes(query)
+                    );
+
+                    if (filtered.length === 0) {
+                        libraryDiv.innerHTML = "<p>No songs found.</p>";
+                        return;
+                    }
+
+                    filtered.forEach(song => {
+                        libraryDiv.innerHTML += `
+                        <div class="song">
+                            <button 
+                                class="fav-btn ${song.isFavorite ? 'active' : 'inactive'}" 
+                                onclick="toggleFavorite('${song.id}', this)"
+                            >
+                                ${song.isFavorite ? '❤️' : '🤍'}
+                            </button>
+                            ${song.imageBase64
+                                ? `<img src="data:image/jpeg;base64,${song.imageBase64}" 
+                                    style="width:100%;height:120px;object-fit:cover;border-radius:6px;">`
+                                : `<div style="height:120px;background:#333;border-radius:6px;
+                                    display:flex;align-items:center;justify-content:center;
+                                    color:#888;">No Image</div>`}
+                            <strong>${song.title}</strong><br>
+                            <span style="color:#aaa;">${song.artist} · ${song.genre} · ${song.mood}</span>
+                        </div>
+                    `;
+                    });
+                });
+        }
+
+        function goToProfile() {
+            window.location.href = "profile.html";
+        }
+
+        function logout() {
+            localStorage.removeItem("currentUser");
+            window.location.href = "https://music-player-m56j.onrender.com/index.html";
+        }
+
+        async function toggleFavorite(songId, btn) {
+            const isCurrentlyFav = btn.classList.contains("active");
+            const newFavState = !isCurrentlyFav;
+
+            btn.classList.toggle("active", newFavState);
+            btn.classList.toggle("inactive", !newFavState);
+            btn.textContent = newFavState ? "❤️" : "🤍";
+
+            try {
+                const response = await fetch(`https://music-player-m56j.onrender.com/api/songs/${songId}/favorite?isFavorite=${newFavState}`,
+                { method: "PATCH" }
+                );
+                if (!response.ok) throw new Error("Failed");
+                
+            } catch (err) {
+                // Revert on failure
+                btn.classList.toggle("active", isCurrentlyFav);
+                btn.textContent = isCurrentlyFav ? "❤️" : "🤍";
+                alert("Could not update favorite. Please try again.");
+            }
+        }
+
+    </script>
 </body>
+
 </html>

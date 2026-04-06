@@ -70,4 +70,10 @@ public class SongController {
     public String deleteSong(@PathVariable String id) {
         return songService.deleteSong(id);
     }
+
+    // ===== Favorite a Song =====
+    @PatchMapping("/{id}/favorite")
+    public ResponseEntity<Song> updateFavorite(@PathVariable String id, @RequestParam boolean isFavorite) {
+    return ResponseEntity.ok(songService.updateFavorite(id, isFavorite));
+    }
 }

@@ -115,4 +115,11 @@ public class SongService {
         }
         return "Song unfavorited.";
     }
+
+    // ===== Update favorite =====
+    public Song updateFavorite(String id, boolean isFavorite) {
+        Song song = songRepository.findById(id).orElseThrow();
+        song.setIsFavorite(isFavorite);
+        return songRepository.save(song);
+    }
 }
