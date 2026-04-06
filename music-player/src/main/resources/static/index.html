@@ -96,7 +96,7 @@ document.getElementById("loginBtn").addEventListener("click", function() {
         console.log("Server said:", data);
         if (data.trim() === "Login successful") {
             localStorage.setItem("currentUser", username);
-            window.location.href = "/home.html";
+            window.location.href = "home.html";
         } else {
             document.getElementById("message").innerText = data;
         }
