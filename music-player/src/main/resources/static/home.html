@@ -111,7 +111,7 @@ function searchLibrary() {
         return;
     }
 
-    fetch("https-production-769f.up.railway.app/api/songs/title/" + encodeURIComponent(query))
+    fetch("https://music-player-m56j.onrender.com/api/songs/title/" + encodeURIComponent(query))
     .then(res => res.json())
     .then(data => {
         let libraryDiv = document.getElementById("library");
