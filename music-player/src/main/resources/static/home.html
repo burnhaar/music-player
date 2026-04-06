@@ -63,14 +63,14 @@ button:hover {
 let currentUser = localStorage.getItem("currentUser");
 
 if (!currentUser) {
-    window.location.href = "https://authentic-hope-production.up.railway.app/index.html";
+    window.location.href = "https://music-player-m56j.onrender.com/index.html";
 }
 
 // ===== Load all songs on page load =====
 window.onload = loadLibrary;  // ← MOVED HERE, outside the function
 
 function loadLibrary() {
-    fetch("https://authentic-hope-production.up.railway.app/api/songs")
+    fetch("https://music-player-m56j.onrender.com/api/songs")
     .then(res => res.json())
     .then(data => {
         let libraryDiv = document.getElementById("library");
@@ -150,7 +150,7 @@ function goToProfile() {
 
 function logout() {
     localStorage.removeItem("currentUser");
-    window.location.href = "https://authentic-hope-production.up.railway.app/index.html";
+    window.location.href = "https://music-player-m56j.onrender.com/index.html";
 }
 
 </script>
