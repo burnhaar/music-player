@@ -17,6 +17,8 @@ public class User implements Comparable<User> {
     private String password;
     private ArrayList<String> favoritedSongIds;
     private ArrayList<String> playlistIds;
+    private ArrayList<String> friends;
+
 
     // ============ CONSTRUCTORS ============
     /**
@@ -38,15 +40,17 @@ public class User implements Comparable<User> {
      * @param playlistIds
      */
     public User(String id, String firstName, String lastname, String username, String email, String password, 
-        ArrayList<String> favoritedSongIds, ArrayList<String> playlistIds) {
-            this.setId(id);
-            this.setFirstName(firstName);
-            this.setLastName(lastname);
-            this.setUsername(username);
-            this.setEmail(email);
-            this.setPassword(password);
-            this.setFavoritedSongIds(favoritedSongIds);
-            this.setPlaylistIds(playlistIds);
+    ArrayList<String> favoritedSongIds, ArrayList<String> playlistIds, ArrayList<String> friends) {
+        this.setId(id);
+        this.setFirstName(firstName);
+        this.setLastName(lastname);
+        this.setUsername(username);
+        this.setEmail(email);
+        this.setPassword(password);
+        this.setFavoritedSongIds(favoritedSongIds);
+        this.setPlaylistIds(playlistIds);
+        this.setFriends(friends);
+
     }
 
     // ============ METHODS ============
@@ -162,5 +166,13 @@ public class User implements Comparable<User> {
     public void setPlaylistIds(ArrayList<String> playlistIds) {
         this.playlistIds = playlistIds;
     }
+
+    public ArrayList<String> getFriends() {
+    return friends;
+}
+
+public void setFriends(ArrayList<String> friends) {
+    this.friends = friends;
+}
 
 }
