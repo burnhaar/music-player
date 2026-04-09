@@ -507,13 +507,14 @@ function handleAvatarChange(event) {
 
 // ===== SONG COUNT =====
 function loadSongCount() {
-  fetch(`${BASE}/api/songs`)
+  fetch(`${BASE}/api/users/${currentUser}`)
     .then(res => res.json())
     .then(data => {
-      document.getElementById("songCount").textContent = data.length;
+      const count = data.favoritedSongIds ? data.favoritedSongIds.length : 0;
+      document.getElementById("songCount").textContent = count;
     })
     .catch(() => {
-      document.getElementById("songCount").textContent = "—";
+      document.getElementById("songCount").textContent = "0";
     });
 }
 
