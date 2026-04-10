@@ -100,44 +100,44 @@
         window.onload = loadLibrary;  // ← MOVED HERE, outside the function
 
         function loadLibrary() {
-            fetch("https://music-player-m56j.onrender.com/api/songs")
+    fetch(`https://music-player-m56j.onrender.com/api/users/${currentUser}`)
+        .then(res => res.json())
+        .then(user => {
+            const favIds = user.favoritedSongIds || [];
+            return fetch("https://music-player-m56j.onrender.com/api/songs")
                 .then(res => res.json())
-                .then(data => {
-                    let libraryDiv = document.getElementById("library");
-                    libraryDiv.innerHTML = "";
+                .then(allSongs => allSongs.filter(song => favIds.includes(song.id)));
+        })
+        .then(savedSongs => {
+            let libraryDiv = document.getElementById("library");
+            libraryDiv.innerHTML = "";
 
-                    if (!data || data.length === 0) {
-                        libraryDiv.innerHTML = "<p>No songs found.</p>";
-                        return;
-                    }
+            if (savedSongs.length === 0) {
+                libraryDiv.innerHTML = "<p>No saved songs yet. Browse songs and hit ❤️ to save them!</p>";
+                return;
+            }
 
-                    data.forEach(song => {
-                    libraryDiv.innerHTML += `
-                        <div class="song">
-                            <button 
-                                class="fav-btn ${song.isFavorite ? 'active' : 'inactive'}" 
-                                onclick="toggleFavorite('${song.id}', this)"
-                            >
-                                ${song.isFavorite ? '❤️' : '🤍'}
-                            </button>
-                            ${song.imageBase64
-                                ? `<img src="data:image/jpeg;base64,${song.imageBase64}" 
-                                    style="width:100%;height:120px;object-fit:cover;border-radius:6px;">`
-                                : `<div style="height:120px;background:#333;border-radius:6px;
-                                    display:flex;align-items:center;justify-content:center;
-                                    color:#888;">No Image</div>`}
-                            <strong>${song.title}</strong><br>
-                            <span style="color:#aaa;">${song.artist} · ${song.genre} · ${song.mood}</span>
-                        </div>
-                    `;
-
-                    });
-                })
-                .catch(err => {
-                    document.getElementById("library").innerHTML = "Failed to load songs.";
-                    console.error(err);
-                });
-        }
+            savedSongs.forEach(song => {
+                libraryDiv.innerHTML += `
+                    <div class="song">
+                        <button class="fav-btn active" onclick="toggleFavorite('${song.id}', this)">❤️</button>
+                        ${song.imageBase64
+                            ? `<img src="data:image/jpeg;base64,${song.imageBase64}" 
+                                style="width:100%;height:120px;object-fit:cover;border-radius:6px;">`
+                            : `<div style="height:120px;background:#333;border-radius:6px;
+                                display:flex;align-items:center;justify-content:center;
+                                color:#888;">No Image</div>`}
+                        <strong>${song.title}</strong><br>
+                        <span style="color:#aaa;">${song.artist} · ${song.genre} · ${song.mood}</span>
+                    </div>
+                `;
+            });
+        })
+        .catch(err => {
+            document.getElementById("library").innerHTML = "Failed to load saved songs.";
+            console.error(err);
+        });
+}
 
         // ===== Search songs =====
         function searchLibrary() {
@@ -197,26 +197,26 @@
         }
 
         async function toggleFavorite(songId, btn) {
-            const isCurrentlyFav = btn.classList.contains("active");
-            const newFavState = !isCurrentlyFav;
+    const isCurrentlyFav = btn.classList.contains("active");
+    const newFavState = !isCurrentlyFav;
 
-            btn.classList.toggle("active", newFavState);
-            btn.classList.toggle("inactive", !newFavState);
-            btn.textContent = newFavState ? "❤️" : "🤍";
+    btn.classList.toggle("active", newFavState);
+    btn.classList.toggle("inactive", !newFavState);
+    btn.textContent = newFavState ? "❤️" : "🤍";
 
-            try {
-                const response = await fetch(`https://music-player-m56j.onrender.com/api/songs/${songId}/favorite?isFavorite=${newFavState}`,
-                { method: "PATCH" }
-                );
-                if (!response.ok) throw new Error("Failed");
-                
-            } catch (err) {
-                // Revert on failure
-                btn.classList.toggle("active", isCurrentlyFav);
-                btn.textContent = isCurrentlyFav ? "❤️" : "🤍";
-                alert("Could not update favorite. Please try again.");
-            }
-        }
+    try {
+        const response = await fetch(
+            `https://music-player-m56j.onrender.com/api/users/${currentUser}/favorites/${songId}?isFavorite=${newFavState}`,
+            { method: "PATCH" }
+        );
+        if (!response.ok) throw new Error("Failed");
+    } catch (err) {
+        // Revert on failure
+        btn.classList.toggle("active", isCurrentlyFav);
+        btn.textContent = isCurrentlyFav ? "❤️" : "🤍";
+        alert("Could not update favorite. Please try again.");
+    }
+}
 
     </script>
 </body>

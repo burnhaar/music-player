@@ -76,4 +76,15 @@ public class SongController {
     public ResponseEntity<Song> updateFavorite(@PathVariable String id, @RequestParam boolean isFavorite) {
     return ResponseEntity.ok(songService.updateFavorite(id, isFavorite));
     }
+
+    // Favorite a song for a user
+@PatchMapping("/{username}/favorites/{songId}")
+public String favoriteSong(@PathVariable String username, @PathVariable String songId, 
+                            @RequestParam boolean isFavorite) {
+    if (isFavorite) {
+        return songService.favoriteSong(username, songId);
+    } else {
+        return songService.unfavoriteSong(username, songId);
+    }
+}
 }
