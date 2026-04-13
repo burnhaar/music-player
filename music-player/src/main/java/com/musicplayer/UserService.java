@@ -104,4 +104,33 @@ public List<String> getFriends(String username) {
     if (user == null) return new ArrayList<>();
     return user.getFriends() != null ? user.getFriends() : new ArrayList<>();
 }
+
+public List<User> searchUsers(String query) {
+    return userRepository.findAll().stream()
+        .filter(u -> u.getUsername() != null &&
+            u.getUsername().toLowerCase().contains(query.toLowerCase()))
+        .collect(java.util.stream.Collectors.toList());
+}
+
+public String addFriend(String username, String friendUsername) {
+    if (username.equals(friendUsername)) return "You cannot friend yourself.";
+    User user = userRepository.findByUsername(username);
+    User friend = userRepository.findByUsername(friendUsername);
+    if (user == null || friend == null) return "User not found.";
+    if (user.getFriends() == null) user.setFriends(new ArrayList<>());
+    if (user.getFriends().contains(friendUsername)) return "Already friends.";
+    user.getFriends().add(friendUsername);
+    userRepository.save(user);
+    return "Friend added.";
+}
+
+public String removeFriend(String username, String friendUsername) {
+    User user = userRepository.findByUsername(username);
+    if (user == null) return "User not found.";
+    if (user.getFriends() != null) {
+        user.getFriends().remove(friendUsername);
+        userRepository.save(user);
+    }
+    return "Friend removed.";
+}
 }

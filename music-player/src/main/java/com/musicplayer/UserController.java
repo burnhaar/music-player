@@ -63,4 +63,22 @@ public class UserController {
             return songService.unfavoriteSong(username, songId);
         }
     }
+
+    // Search users by username
+@GetMapping("/search")
+public List<User> searchUsers(@RequestParam String query) {
+    return userService.searchUsers(query);
+}
+
+// Add a friend
+@PatchMapping("/{username}/friends/add/{friendUsername}")
+public String addFriend(@PathVariable String username, @PathVariable String friendUsername) {
+    return userService.addFriend(username, friendUsername);
+}
+
+// Remove a friend
+@PatchMapping("/{username}/friends/remove/{friendUsername}")
+public String removeFriend(@PathVariable String username, @PathVariable String friendUsername) {
+    return userService.removeFriend(username, friendUsername);
+}
 }

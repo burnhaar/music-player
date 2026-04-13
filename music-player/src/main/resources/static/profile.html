@@ -425,6 +425,18 @@
   <hr class="divider">
 
   <!-- FRIENDS -->
+
+  <!-- FIND FRIENDS -->
+<div style="margin-bottom: 28px;">
+    <div class="section-title">Find Friends</div>
+    <div style="display:flex; gap:10px; margin-bottom:16px;">
+        <input type="text" id="friendSearch" placeholder="Search by username..."
+            oninput="searchUsers()"
+            style="padding:8px 12px;border-radius:6px;border:1px solid #2a2a2a;
+                   background:#1f1f1f;color:#f0f0f0;font-size:14px;width:280px;outline:none;">
+    </div>
+    <div id="searchResults"></div>
+</div>
   <div id="friendsSection">
     <div class="section-title">Friends</div>
     <div class="friends-grid" id="friendsGrid">
@@ -459,8 +471,74 @@
 <script>
 const BASE = "https://music-player-m56j.onrender.com";
 let currentUser = localStorage.getItem("currentUser");
+let friends = [];
 
 if (!currentUser) window.location.href = "index.html";
+
+function searchUsers() {
+    const query = document.getElementById("friendSearch").value.trim();
+    const resultsDiv = document.getElementById("searchResults");
+
+    if (!query) { resultsDiv.innerHTML = ""; return; }
+
+    fetch(`${BASE}/api/users/search?query=${encodeURIComponent(query)}`)
+        .then(res => res.json())
+        .then(users => {
+            const others = users.filter(u => u.username !== currentUser);
+            if (others.length === 0) {
+                resultsDiv.innerHTML = "<p style='color:#888;font-size:0.9rem;'>No users found.</p>";
+                return;
+            }
+
+            resultsDiv.innerHTML = others.map(u => {
+                const isFriend = friends.includes(u.username);
+                return `
+                    <div style="display:flex;justify-content:space-between;align-items:center;
+                                background:#1f1f1f;border:1px solid #2a2a2a;border-radius:10px;
+                                padding:10px 16px;margin-bottom:8px;">
+                        <span style="font-weight:500;">${u.username}</span>
+                        ${isFriend
+                            ? `<button onclick="removeFriend('${u.username}')"
+                                style="background:#e74c3c;color:white;border:none;border-radius:6px;
+                                       padding:5px 12px;cursor:pointer;font-size:13px;">Unfriend</button>`
+                            : `<button onclick="addFriend('${u.username}')"
+                                style="background:#4f8ef7;color:white;border:none;border-radius:6px;
+                                       padding:5px 12px;cursor:pointer;font-size:13px;">+ Add Friend</button>`
+                        }
+                    </div>
+                `;
+            }).join("");
+        })
+        .catch(() => {
+            resultsDiv.innerHTML = "<p style='color:#888;'>Search failed.</p>";
+        });
+}
+
+function addFriend(friendUsername) {
+    fetch(`${BASE}/api/users/${currentUser}/friends/add/${friendUsername}`, { method: "PATCH" })
+        .then(res => res.text())
+        .then(data => {
+            showToast(data, "success");
+            friends.push(friendUsername);
+            document.getElementById("friendCount").textContent = friends.length;
+            loadFriends();
+            searchUsers(); // refresh search results
+        })
+        .catch(() => showToast("Failed to add friend.", "error"));
+}
+
+function removeFriend(friendUsername) {
+    fetch(`${BASE}/api/users/${currentUser}/friends/remove/${friendUsername}`, { method: "PATCH" })
+        .then(res => res.text())
+        .then(data => {
+            showToast(data, "success");
+            friends = friends.filter(f => f !== friendUsername);
+            document.getElementById("friendCount").textContent = friends.length;
+            loadFriends();
+            searchUsers();
+        })
+        .catch(() => showToast("Failed to remove friend.", "error"));
+}
 
 // ===== INIT =====
 window.onload = async function() {
@@ -520,28 +598,14 @@ function loadSongCount() {
 
 // ===== FRIENDS =====
 function loadFriends() {
-  fetch(`${BASE}/api/users/${currentUser}/friends`)
-    .then(res => {
-      if (!res.ok) throw new Error();
-      return res.json();
-    })
-    .then(friends => {
-      document.getElementById("friendCount").textContent = friends.length;
-      renderFriends(friends);
-    })
-    .catch(() => {
-      // Fallback: show all users as "friends" if no friends endpoint yet
-      fetch(`${BASE}/api/users`)
+    fetch(`${BASE}/api/users/${currentUser}/friends`)
         .then(res => res.json())
-        .then(users => {
-          const others = users.filter(u => u.username !== currentUser);
-          document.getElementById("friendCount").textContent = others.length;
-          renderFriends(others.map(u => u.username));
+        .then(data => {
+            friends = data;
+            document.getElementById("friendCount").textContent = friends.length;
+            renderFriends(friends);
         })
-        .catch(() => {
-          document.getElementById("friendsGrid").innerHTML = '<div class="empty">No friends found.</div>';
-        });
-    });
+        .catch(() => {});
 }
 
 function renderFriends(friends) {
