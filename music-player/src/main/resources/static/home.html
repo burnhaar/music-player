@@ -280,8 +280,7 @@
 
 <!-- FAVORITES TAB -->
 <div class="tab-content active" id="tab-favorites">
-    <input type="text" id="search" placeholder="Search your favorited songs..." onkeyup="searchLibrary()"
-        style="padding:8px;width:60%;background:#1e1e1e;border:1px solid #333;color:white;border-radius:6px;outline:none;margin-bottom:16px;">
+<input type="text" id="search" placeholder="Search by title, artist, genre, mood..." oninput="searchLibrary()" ...>        style="padding:8px;width:60%;background:#1e1e1e;border:1px solid #333;color:white;border-radius:6px;outline:none;margin-bottom:16px;">
     <div id="library">Loading...</div>
 </div>
 
@@ -371,21 +370,23 @@
 
     // ===== SEARCH =====
     function searchLibrary() {
-        const query = document.getElementById("search").value.toLowerCase();
-        fetch(`${BASE}/api/users/${currentUser}`)
-            .then(res => res.json())
-            .then(user => {
-                const favIds = user.favoritedSongIds || [];
-                let saved = allSongs.filter(s => favIds.includes(s.id));
-                if (query) {
-                    saved = saved.filter(s =>
-                        s.title.toLowerCase().includes(query) ||
-                        s.artist.toLowerCase().includes(query)
-                    );
-                }
-                renderLibrary(saved);
-            });
-    }
+    const query = document.getElementById("search").value.toLowerCase();
+    fetch(`${BASE}/api/users/${currentUser}`)
+        .then(res => res.json())
+        .then(user => {
+            const favIds = user.favoritedSongIds || [];
+            let saved = allSongs.filter(s => favIds.includes(s.id));
+            if (query) {
+                saved = saved.filter(s =>
+                    (s.title && s.title.toLowerCase().includes(query)) ||
+                    (s.artist && s.artist.toLowerCase().includes(query)) ||
+                    (s.genre && s.genre.toLowerCase().includes(query)) ||
+                    (s.mood && s.mood.toLowerCase().includes(query))
+                );
+            }
+            renderLibrary(saved);
+        });
+}
 
     // ===== TOGGLE FAVORITE =====
     async function toggleFavorite(songId, btn) {

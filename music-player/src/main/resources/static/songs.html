@@ -181,17 +181,9 @@
     <h1>🎵 Song Library</h1>
 
     <div class="search-bar">
-        <input type="text" id="search-input" placeholder="Search...">
-        <select id="search-type">
-            <option value="all">All Songs</option>
-            <option value="title">By Title</option>
-            <option value="artist">By Artist</option>
-            <option value="genre">By Genre</option>
-            <option value="mood">By Mood</option>
-        </select>
-        <button onclick="searchSongs()">Search</button>
-        <button onclick="loadAllSongs()">Reset</button>
-    </div>
+    <input type="text" id="search-input" placeholder="Search by title, artist, genre, mood..." oninput="searchSongs()" style="width:400px;">
+    <button onclick="loadAllSongs()">Reset</button>
+</div>
 
     <div id="song-list">Loading songs...</div>
 
@@ -219,20 +211,23 @@
         window.onload = loadAllSongs;
 
         // ===== LOAD ALL SONGS + USER DATA =====
-        function loadAllSongs() {
-            Promise.all([
-                fetch(API_BASE).then(res => res.json()),
-                fetch(`${BASE}/api/users/${currentUser}`).then(res => res.json())
-            ])
-            .then(([songs, user]) => {
-                userFavIds = user.favoritedSongIds || [];
-                loadUserPlaylists().then(() => displaySongs(songs));
-            })
-            .catch(err => {
-                document.getElementById("song-list").innerHTML = "Failed to load songs.";
-                console.error(err);
-            });
-        }
+        let allSongs = [];
+
+function loadAllSongs() {
+    Promise.all([
+        fetch(API_BASE).then(res => res.json()),
+        fetch(`${BASE}/api/users/${currentUser}`).then(res => res.json())
+    ])
+    .then(([songs, user]) => {
+        allSongs = songs;  // ← store all songs
+        userFavIds = user.favoritedSongIds || [];
+        loadUserPlaylists().then(() => displaySongs(songs));
+    })
+    .catch(err => {
+        document.getElementById("song-list").innerHTML = "Failed to load songs.";
+        console.error(err);
+    });
+}
 
         function loadUserPlaylists() {
             return fetch(`${BASE}/api/users/${currentUser}`)
@@ -249,16 +244,20 @@
 
         // ===== SEARCH =====
         function searchSongs() {
-            const type = document.getElementById("search-type").value;
-            const query = document.getElementById("search-input").value.trim();
+    const query = document.getElementById("search-input").value.trim().toLowerCase();
 
-            if (type === "all" || query === "") { loadAllSongs(); return; }
+    if (!query) { loadAllSongs(); return; }
 
-            fetch(`${API_BASE}/${type}/${encodeURIComponent(query)}`)
-                .then(res => res.json())
-                .then(songs => displaySongs(songs))
-                .catch(err => console.error(err));
-        }
+    // Search across all fields on the frontend
+    const results = allSongs.filter(song =>
+        (song.title && song.title.toLowerCase().includes(query)) ||
+        (song.artist && song.artist.toLowerCase().includes(query)) ||
+        (song.genre && song.genre.toLowerCase().includes(query)) ||
+        (song.mood && song.mood.toLowerCase().includes(query))
+    );
+
+    displaySongs(results);
+}
 
         // ===== DISPLAY SONGS =====
         function displaySongs(songs) {
