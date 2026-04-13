@@ -14,6 +14,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private SongService songService;
+
     // ================= GET ALL USERS =================
     @GetMapping
     public List<User> getAllUsers() {
@@ -39,14 +42,25 @@ public class UserController {
     }
 
     // Change username
-@PutMapping("/{username}/username")
-public String updateUsername(@PathVariable String username, @RequestBody Map<String, String> body) {
-    return userService.updateUsername(username, body.get("newUsername"));
-}
+    @PutMapping("/{username}/username")
+    public String updateUsername(@PathVariable String username, @RequestBody Map<String, String> body) {
+        return userService.updateUsername(username, body.get("newUsername"));
+    }
 
-// Get friends list
-@GetMapping("/{username}/friends")
-public List<String> getFriends(@PathVariable String username) {
-    return userService.getFriends(username);
-}
+    // Get friends list
+    @GetMapping("/{username}/friends")
+    public List<String> getFriends(@PathVariable String username) {
+        return userService.getFriends(username);
+    }
+
+    // Favorite/unfavorite a song for a user
+    @PatchMapping("/{username}/favorites/{songId}")
+    public String favoriteSong(@PathVariable String username, @PathVariable String songId,
+            @RequestParam boolean isFavorite) {
+        if (isFavorite) {
+            return songService.favoriteSong(username, songId);
+        } else {
+            return songService.unfavoriteSong(username, songId);
+        }
+    }
 }
