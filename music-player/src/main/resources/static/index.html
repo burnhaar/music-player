@@ -78,47 +78,52 @@ a {
 
 <script>
 document.getElementById("loginBtn").addEventListener("click", function() {
-    let username = document.getElementById("username").value;
-    let password = document.getElementById("password").value;
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+    const btn = document.getElementById("loginBtn");
+    const msg = document.getElementById("message");
 
     if (!username || !password) {
-        document.getElementById("message").innerText = "Please enter username and password.";
+        msg.style.color = "red";
+        msg.innerText = "Please enter username and password.";
         return;
     }
 
+    // Show loading state
+    btn.disabled = true;
+    btn.textContent = "Logging in...";
+    msg.style.color = "#2a5298";
+    msg.innerText = "Please wait...";
 
-const BACKEND_URL = "https://music-player-m56j.onrender.com/api/users/login";
-    
-    fetch(BACKEND_URL, {
+    fetch("https://music-player-m56j.onrender.com/api/users/login", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-            username: username,
-            password: password
-        })
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
     })
     .then(async res => {
-        if (res.ok) {
-            return res.text();
-        } else {
-            const errorData = await res.text();
-            throw new Error(errorData || "Login failed");
-        }
+        if (res.ok) return res.text();
+        const err = await res.text();
+        throw new Error(err || "Login failed");
     })
     .then(data => {
-        console.log("Server response:", data);
-
         if (data.toLowerCase().includes("successful")) {
+            msg.style.color = "green";
+            msg.innerText = "Login successful! Redirecting...";
             localStorage.setItem("currentUser", username);
-            
-            window.location.href = "home.html"; 
+            setTimeout(() => window.location.href = "home.html", 500);
         } else {
-            document.getElementById("message").innerText = data;
+            msg.style.color = "red";
+            msg.innerText = data;
+            btn.disabled = false;
+            btn.textContent = "Log In";
         }
     })
     .catch(err => {
         console.error("Login Error:", err);
-        document.getElementById("message").innerText = "Connection error. Is the backend running?";
+        msg.style.color = "red";
+        msg.innerText = err.message || "Connection error. Is the backend running?";
+        btn.disabled = false;
+        btn.textContent = "Log In";
     });
 });
 </script>

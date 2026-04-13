@@ -77,29 +77,58 @@ a {
 
 <script>
 function registerUser() {
-    let username = document.getElementById("username").value;
-    let password = document.getElementById("password").value;
-    
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+    const email = document.getElementById("email").value;
+    const btn = document.querySelector("button[type='submit']");
+    const msg = document.getElementById("message");
+
+    // Show loading state
+    btn.disabled = true;
+    btn.textContent = "Creating account...";
+    msg.style.color = "#2a5298";
+    msg.textContent = "Please wait...";
 
     fetch("https://music-player-m56j.onrender.com/api/users/register", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-    username: username,
-    email: document.getElementById("email").value,
-    password: password
-})
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, email, password })
     })
     .then(res => res.text())
     .then(data => {
-
         if (data === "Registration successful.") {
-            alert("Account created!");
-            window.location.href = "index.html";
-        } else {
-            document.getElementById("message").innerText = data;
-        }
+            msg.style.color = "green";
+            msg.textContent = "Account created! Logging you in...";
 
+            // Auto login
+            return fetch("https://music-player-m56j.onrender.com/api/users/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, password })
+            })
+            .then(res => res.text())
+            .then(loginData => {
+                if (loginData.toLowerCase().includes("successful")) {
+                    localStorage.setItem("currentUser", username);
+                    window.location.href = "home.html";
+                } else {
+                    msg.style.color = "green";
+                    msg.textContent = "Account created! Please log in.";
+                    setTimeout(() => window.location.href = "index.html", 1500);
+                }
+            });
+        } else {
+            msg.style.color = "red";
+            msg.textContent = data;
+            btn.disabled = false;
+            btn.textContent = "Sign Up";
+        }
+    })
+    .catch(() => {
+        msg.style.color = "red";
+        msg.textContent = "Connection error. Please try again.";
+        btn.disabled = false;
+        btn.textContent = "Sign Up";
     });
 
     return false;
