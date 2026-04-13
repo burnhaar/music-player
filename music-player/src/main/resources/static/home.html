@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="UTF-8">
-    <title>Home</title>
+    <title>Your Library</title>
     <style>
+        * { box-sizing: border-box; }
+
         body {
             margin: 0;
             font-family: Arial;
@@ -20,17 +21,43 @@
             align-items: center;
         }
 
-        button {
+        .navbar button {
             padding: 6px 12px;
             cursor: pointer;
             border: none;
             border-radius: 6px;
+            margin-left: 6px;
         }
 
-        button:hover {
-            opacity: 0.8;
+        .navbar button:hover { opacity: 0.8; }
+
+        /* ===== TABS ===== */
+        .tabs {
+            display: flex;
+            padding: 20px 20px 0 20px;
+            border-bottom: 2px solid #2a2a2a;
         }
 
+        .tab-btn {
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 15px;
+            font-weight: bold;
+            padding: 10px 24px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover { color: white; opacity: 1; }
+        .tab-btn.active { color: white; border-bottom: 3px solid #2a5298; }
+
+        .tab-content { display: none; padding: 20px; }
+        .tab-content.active { display: block; }
+
+        /* ===== SONGS ===== */
         .song {
             background: #1e1e1e;
             margin: 10px 0;
@@ -43,7 +70,7 @@
             position: absolute;
             top: 12px;
             right: 12px;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0,0,0,0.5);
             border: none;
             border-radius: 50%;
             width: 36px;
@@ -58,10 +85,7 @@
             z-index: 10;
         }
 
-        .fav-btn:hover {
-            transform: scale(1.2);
-            opacity: 1;
-        }
+        .fav-btn:hover { transform: scale(1.2); }
 
         .add-playlist-btn {
             margin-top: 8px;
@@ -74,73 +98,14 @@
             cursor: pointer;
         }
 
-        .add-playlist-btn:hover {
-            background: #1e3c72;
-        }
-
-        /* ===== SECTION HEADERS ===== */
-        .section-header {
-            padding: 20px 20px 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .section-header h3 {
-            margin: 0;
-        }
+        .add-playlist-btn:hover { background: #1e3c72; opacity: 1; }
 
         /* ===== PLAYLISTS ===== */
-        .playlist-card {
-            background: #1a1a2e;
-            border: 1px solid #2a5298;
-            margin: 10px 0;
-            padding: 15px;
-            border-radius: 8px;
-        }
-
-        .playlist-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .playlist-name {
-            font-weight: bold;
-            font-size: 16px;
-            color: #7eb3ff;
-        }
-
-        .playlist-actions button {
-            margin-left: 6px;
-            font-size: 12px;
-            padding: 4px 10px;
-        }
-
-        .playlist-song {
-            background: #252525;
-            margin: 5px 0;
-            padding: 8px 12px;
-            border-radius: 6px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 14px;
-        }
-
-        .playlist-song button {
-            background: #e74c3c;
-            color: white;
-            font-size: 11px;
-            padding: 3px 8px;
-        }
-
         .create-playlist-bar {
-            padding: 10px 20px;
             display: flex;
             gap: 10px;
             align-items: center;
+            margin-bottom: 20px;
         }
 
         .create-playlist-bar input {
@@ -151,12 +116,89 @@
             color: white;
             font-size: 14px;
             width: 220px;
+            outline: none;
         }
 
         .create-playlist-bar button {
             background: #1DB954;
             color: black;
             font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            padding: 7px 14px;
+            cursor: pointer;
+        }
+
+        .playlist-card {
+            background: #1a1a2e;
+            border: 1px solid #2a5298;
+            margin: 10px 0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .playlist-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .playlist-header:hover { background: #1e2a4a; }
+
+        .playlist-name {
+            font-weight: bold;
+            font-size: 15px;
+            color: #7eb3ff;
+        }
+
+        .playlist-header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .playlist-toggle { font-size: 12px; color: #888; }
+
+        .delete-playlist-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 4px 10px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .playlist-songs {
+            display: none;
+            border-top: 1px solid #2a2a2a;
+            padding: 10px 16px;
+        }
+
+        .playlist-songs.open { display: block; }
+
+        .playlist-song-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 7px 0;
+            border-bottom: 1px solid #222;
+            font-size: 14px;
+        }
+
+        .playlist-song-row:last-child { border-bottom: none; }
+
+        .remove-song-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 3px 8px;
+            font-size: 11px;
+            cursor: pointer;
         }
 
         /* ===== MODAL ===== */
@@ -170,9 +212,7 @@
             justify-content: center;
         }
 
-        .modal-overlay.active {
-            display: flex;
-        }
+        .modal-overlay.active { display: flex; }
 
         .modal {
             background: #1e1e1e;
@@ -184,15 +224,11 @@
             position: relative;
         }
 
-        .modal h3 {
-            margin-top: 0;
-            color: #7eb3ff;
-        }
+        .modal h3 { margin-top: 0; color: #7eb3ff; }
 
         .modal-close {
             position: absolute;
-            top: 12px;
-            right: 16px;
+            top: 12px; right: 16px;
             background: none;
             border: none;
             color: #aaa;
@@ -206,341 +242,313 @@
             border-radius: 8px;
             padding: 10px 14px;
             margin: 8px 0;
-            cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
             transition: border-color 0.2s;
         }
 
-        .playlist-option:hover {
-            border-color: #2a5298;
-        }
+        .playlist-option:hover { border-color: #2a5298; }
 
         .playlist-option button {
             background: #1DB954;
             color: black;
+            border: none;
+            border-radius: 6px;
             font-size: 12px;
             padding: 4px 10px;
+            cursor: pointer;
         }
     </style>
 </head>
-
 <body>
 
-    <div class="navbar">
-        <h2>🎵 My Library</h2>
-        <div>
-            <button onclick="window.location.href='songs.html'">Browse Songs</button>
-            <button onclick="goToProfile()">Profile</button>
-            <button onclick="logout()">Logout</button>
-        </div>
+<div class="navbar">
+    <h2>🎵 My Library</h2>
+    <div>
+        <button onclick="window.location.href='songs.html'">Browse Songs</button>
+        <button onclick="window.location.href='profile.html'">Profile</button>
+        <button onclick="logout()" style="background:#e74c3c;color:white;">Logout</button>
     </div>
+</div>
 
-    <div style="padding:20px 20px 0 20px;">
-        <input type="text" id="search" placeholder="Search your library..." onkeyup="searchLibrary()"
-            style="padding:8px; width:60%; background:#1e1e1e; border:1px solid #333; color:white; border-radius:6px;">
-    </div>
+<!-- TABS -->
+<div class="tabs">
+    <button class="tab-btn active" id="tab-btn-favorites" onclick="switchTab('favorites', this)">❤️ Favorited Songs</button>
+    <button class="tab-btn" id="tab-btn-playlists" onclick="switchTab('playlists', this)">📋 Playlists</button>
+</div>
 
-    <!-- SAVED SONGS -->
-    <div class="section-header">
-        <h3>❤️ Your Library</h3>
-    </div>
-    <div id="library" style="padding:0 20px 20px 20px;">Loading...</div>
+<!-- FAVORITES TAB -->
+<div class="tab-content active" id="tab-favorites">
+    <input type="text" id="search" placeholder="Search your favorited songs..." onkeyup="searchLibrary()"
+        style="padding:8px;width:60%;background:#1e1e1e;border:1px solid #333;color:white;border-radius:6px;outline:none;margin-bottom:16px;">
+    <div id="library">Loading...</div>
+</div>
 
-    <!-- PLAYLISTS -->
-    <div class="section-header">
-        <h3>📋 Your Playlists</h3>
-    </div>
-
+<!-- PLAYLISTS TAB -->
+<div class="tab-content" id="tab-playlists">
     <div class="create-playlist-bar">
         <input type="text" id="newPlaylistName" placeholder="New playlist name...">
-        <button onclick="createPlaylist()">+ Create</button>
+        <button onclick="createPlaylist()">+ Create Playlist</button>
     </div>
+    <div id="playlists">Loading playlists...</div>
+</div>
 
-    <div id="playlists" style="padding:0 20px 40px 20px;">Loading playlists...</div>
-
-    <!-- ADD TO PLAYLIST MODAL -->
-    <div class="modal-overlay" id="addToPlaylistModal">
-        <div class="modal">
-            <button class="modal-close" onclick="closeModal()">✕</button>
-            <h3>Add to Playlist</h3>
-            <p id="modalSongName" style="color:#aaa; margin-bottom:12px;"></p>
-            <div id="playlistOptions">Loading...</div>
-        </div>
+<!-- ADD TO PLAYLIST MODAL -->
+<div class="modal-overlay" id="addToPlaylistModal">
+    <div class="modal">
+        <button class="modal-close" onclick="closeModal()">✕</button>
+        <h3>Add to Playlist</h3>
+        <p id="modalSongName" style="color:#aaa;margin-bottom:12px;"></p>
+        <div id="playlistOptions">Loading...</div>
     </div>
+</div>
 
-    <script>
-        const BASE = "https://music-player-m56j.onrender.com";
-        let currentUser = localStorage.getItem("currentUser");
+<script>
+    const BASE = "https://music-player-m56j.onrender.com";
+    const currentUser = localStorage.getItem("currentUser");
 
-        if (!currentUser) {
-            window.location.href = "index.html";
+    if (!currentUser) window.location.href = "index.html";
+
+    let allSongs = [];
+    let userPlaylists = [];
+    let selectedSongId = null;
+
+    window.onload = function () {
+        loadLibrary();
+        loadPlaylists();
+    };
+
+    // ===== TABS =====
+    function switchTab(tab, btn) {
+        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+        document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+        document.getElementById("tab-" + tab).classList.add("active");
+        btn.classList.add("active");
+    }
+
+    // ===== LOAD FAVORITED SONGS =====
+    function loadLibrary() {
+        Promise.all([
+            fetch(`${BASE}/api/users/${currentUser}`).then(res => res.json()),
+            fetch(`${BASE}/api/songs`).then(res => res.json())
+        ])
+        .then(([user, songs]) => {
+            allSongs = songs;
+            const favIds = user.favoritedSongIds || [];
+            const saved = songs.filter(s => favIds.includes(s.id));
+            renderLibrary(saved);
+        })
+        .catch(() => {
+            document.getElementById("library").innerHTML = "<p>Failed to load songs.</p>";
+        });
+    }
+
+    function renderLibrary(songs) {
+        const div = document.getElementById("library");
+
+        if (!songs || songs.length === 0) {
+            div.innerHTML = "<p style='color:#888;'>No favorited songs yet. Browse songs and hit ❤️ to save them!</p>";
+            return;
         }
 
-        let allSongs = [];
-        let userPlaylists = [];
-        let selectedSongId = null;
+        div.innerHTML = songs.map(song => `
+            <div class="song">
+                <button class="fav-btn active" onclick="toggleFavorite('${song.id}', this)">❤️</button>
+                ${song.imageBase64
+                    ? `<img src="data:image/jpeg;base64,${song.imageBase64}"
+                        style="width:100%;height:120px;object-fit:cover;border-radius:6px;">`
+                    : `<div style="height:120px;background:#333;border-radius:6px;
+                        display:flex;align-items:center;justify-content:center;color:#888;">No Image</div>`}
+                <strong>${song.title}</strong><br>
+                <span style="color:#aaa;">${song.artist} · ${song.genre} · ${song.mood}</span><br>
+                <button class="add-playlist-btn" onclick="openAddToPlaylist('${song.id}', '${song.title.replace(/'/g, "\\'")}')">
+                    + Add to Playlist
+                </button>
+            </div>
+        `).join("");
+    }
 
-        window.onload = function () {
-            loadLibrary();
-            loadPlaylists();
-        };
-
-        // ===== LOAD SAVED SONGS =====
-        function loadLibrary() {
-            Promise.all([
-                fetch(`${BASE}/api/users/${currentUser}`).then(res => res.json()),
-                fetch(`${BASE}/api/songs`).then(res => res.json())
-            ])
-            .then(([user, songs]) => {
-                allSongs = songs;
+    // ===== SEARCH =====
+    function searchLibrary() {
+        const query = document.getElementById("search").value.toLowerCase();
+        fetch(`${BASE}/api/users/${currentUser}`)
+            .then(res => res.json())
+            .then(user => {
                 const favIds = user.favoritedSongIds || [];
-                const savedSongs = songs.filter(s => favIds.includes(s.id));
-                renderLibrary(savedSongs);
-            })
-            .catch(err => {
-                document.getElementById("library").innerHTML = "<p>Failed to load songs.</p>";
-                console.error(err);
-            });
-        }
-
-        function renderLibrary(songs) {
-            const libraryDiv = document.getElementById("library");
-
-            if (!songs || songs.length === 0) {
-                libraryDiv.innerHTML = "<p style='color:#888;'>No saved songs yet. Browse songs and hit ❤️ to save them!</p>";
-                return;
-            }
-
-            libraryDiv.innerHTML = songs.map(song => `
-                <div class="song">
-                    <button class="fav-btn active" onclick="toggleFavorite('${song.id}', this)">❤️</button>
-                    ${song.imageBase64
-                        ? `<img src="data:image/jpeg;base64,${song.imageBase64}" 
-                            style="width:100%;height:120px;object-fit:cover;border-radius:6px;">`
-                        : `<div style="height:120px;background:#333;border-radius:6px;
-                            display:flex;align-items:center;justify-content:center;
-                            color:#888;">No Image</div>`}
-                    <strong>${song.title}</strong><br>
-                    <span style="color:#aaa;">${song.artist} · ${song.genre} · ${song.mood}</span><br>
-                    <button class="add-playlist-btn" onclick="openAddToPlaylist('${song.id}', '${song.title.replace(/'/g, "\\'")}')">
-                        + Add to Playlist
-                    </button>
-                </div>
-            `).join("");
-        }
-
-        // ===== SEARCH LIBRARY =====
-        function searchLibrary() {
-            const query = document.getElementById("search").value.toLowerCase();
-
-            fetch(`${BASE}/api/users/${currentUser}`)
-                .then(res => res.json())
-                .then(user => {
-                    const favIds = user.favoritedSongIds || [];
-                    const savedSongs = allSongs.filter(s => favIds.includes(s.id));
-
-                    if (!query) {
-                        renderLibrary(savedSongs);
-                        return;
-                    }
-
-                    const filtered = savedSongs.filter(s =>
+                let saved = allSongs.filter(s => favIds.includes(s.id));
+                if (query) {
+                    saved = saved.filter(s =>
                         s.title.toLowerCase().includes(query) ||
                         s.artist.toLowerCase().includes(query)
                     );
-                    renderLibrary(filtered);
-                });
+                }
+                renderLibrary(saved);
+            });
+    }
+
+    // ===== TOGGLE FAVORITE =====
+    async function toggleFavorite(songId, btn) {
+        const isCurrentlyFav = btn.classList.contains("active");
+        const newFavState = !isCurrentlyFav;
+        try {
+            const res = await fetch(
+                `${BASE}/api/users/${currentUser}/favorites/${songId}?isFavorite=${newFavState}`,
+                { method: "PATCH" }
+            );
+            if (!res.ok) throw new Error();
+            loadLibrary();
+        } catch {
+            alert("Could not update favorite.");
+        }
+    }
+
+    // ===== LOAD PLAYLISTS =====
+    function loadPlaylists() {
+        fetch(`${BASE}/api/users/${currentUser}`)
+            .then(res => res.json())
+            .then(user => {
+                const ids = user.playlistIds || [];
+                if (ids.length === 0) {
+                    document.getElementById("playlists").innerHTML =
+                        "<p style='color:#888;'>No playlists yet. Create one above!</p>";
+                    userPlaylists = [];
+                    return null;
+                }
+                return Promise.all(ids.map(id =>
+                    fetch(`${BASE}/api/playlists/${id}`).then(r => r.json())
+                ));
+            })
+            .then(playlists => {
+                if (!playlists) return;
+                userPlaylists = playlists;
+                renderPlaylists(playlists);
+            })
+            .catch(() => {
+                document.getElementById("playlists").innerHTML = "<p>Failed to load playlists.</p>";
+            });
+    }
+
+    function renderPlaylists(playlists) {
+        const container = document.getElementById("playlists");
+
+        if (!playlists || playlists.length === 0) {
+            container.innerHTML = "<p style='color:#888;'>No playlists yet. Create one above!</p>";
+            return;
         }
 
-        // ===== TOGGLE FAVORITE =====
-        async function toggleFavorite(songId, btn) {
-            const isCurrentlyFav = btn.classList.contains("active");
-            const newFavState = !isCurrentlyFav;
+        container.innerHTML = playlists.map(playlist => {
+            const songs = (playlist.songIds || [])
+                .map(id => allSongs.find(s => s.id === id))
+                .filter(Boolean);
 
-            try {
-                const response = await fetch(
-                    `${BASE}/api/users/${currentUser}/favorites/${songId}?isFavorite=${newFavState}`,
-                    { method: "PATCH" }
-                );
-                if (!response.ok) throw new Error("Failed");
-                loadLibrary(); // reload to reflect removal
-            } catch (err) {
-                alert("Could not update favorite. Please try again.");
-            }
-        }
-
-        // ===== LOAD PLAYLISTS =====
-        function loadPlaylists() {
-            fetch(`${BASE}/api/users/${currentUser}`)
-                .then(res => res.json())
-                .then(user => {
-                    const playlistIds = user.playlistIds || [];
-                    if (playlistIds.length === 0) {
-                        document.getElementById("playlists").innerHTML = "<p style='color:#888;'>No playlists yet. Create one above!</p>";
-                        userPlaylists = [];
-                        return;
-                    }
-
-                    return Promise.all(
-                        playlistIds.map(id =>
-                            fetch(`${BASE}/api/playlists/${id}`).then(res => res.json())
-                        )
-                    );
-                })
-                .then(playlists => {
-                    if (!playlists) return;
-                    userPlaylists = playlists;
-                    renderPlaylists(playlists);
-                })
-                .catch(err => {
-                    document.getElementById("playlists").innerHTML = "<p>Failed to load playlists.</p>";
-                    console.error(err);
-                });
-        }
-
-        function renderPlaylists(playlists) {
-            const container = document.getElementById("playlists");
-
-            if (!playlists || playlists.length === 0) {
-                container.innerHTML = "<p style='color:#888;'>No playlists yet. Create one above!</p>";
-                return;
-            }
-
-            container.innerHTML = playlists.map(playlist => {
-                const songs = (playlist.songIds || [])
-                    .map(id => allSongs.find(s => s.id === id))
-                    .filter(Boolean);
-
-                return `
-                    <div class="playlist-card">
-                        <div class="playlist-header">
-                            <span class="playlist-name">🎵 ${playlist.name}</span>
-                            <div class="playlist-actions">
-                                <button onclick="deletePlaylist('${playlist.id}')" 
-                                    style="background:#e74c3c;color:white;">🗑 Delete</button>
-                            </div>
+            return `
+                <div class="playlist-card">
+                    <div class="playlist-header" onclick="togglePlaylist('songs-${playlist.id}')">
+                        <span class="playlist-name">🎵 ${playlist.name}</span>
+                        <div class="playlist-header-right">
+                            <span class="playlist-toggle">${songs.length} song${songs.length !== 1 ? 's' : ''} ▼</span>
+                            <button class="delete-playlist-btn" onclick="event.stopPropagation(); deletePlaylist('${playlist.id}')">🗑 Delete</button>
                         </div>
+                    </div>
+                    <div class="playlist-songs" id="songs-${playlist.id}">
                         ${songs.length === 0
-                            ? `<p style="color:#888;font-size:13px;">No songs yet.</p>`
+                            ? `<p style="color:#888;font-size:13px;padding:8px 0;">No songs yet. Add from Browse Songs or Favorited Songs.</p>`
                             : songs.map(song => `
-                                <div class="playlist-song">
-                                    <span>${song.title} <span style="color:#888;">· ${song.artist}</span></span>
-                                    <button onclick="removeSongFromPlaylist('${playlist.id}', '${song.id}')">Remove</button>
+                                <div class="playlist-song-row">
+                                    <span><strong>${song.title}</strong> <span style="color:#888;">· ${song.artist}</span></span>
+                                    <button class="remove-song-btn" onclick="removeSongFromPlaylist('${playlist.id}', '${song.id}')">Remove</button>
                                 </div>
                             `).join("")
                         }
                     </div>
-                `;
-            }).join("");
-        }
-
-        // ===== CREATE PLAYLIST =====
-        function createPlaylist() {
-            const name = document.getElementById("newPlaylistName").value.trim();
-            if (!name) { alert("Please enter a playlist name."); return; }
-
-            fetch(`${BASE}/api/playlists/?username=${currentUser}`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name: name, isPrivate: false, songIds: [] })
-            })
-            .then(res => res.json())
-            .then(() => {
-                document.getElementById("newPlaylistName").value = "";
-                loadPlaylists();
-            })
-            .catch(err => {
-                alert("Failed to create playlist.");
-                console.error(err);
-            });
-        }
-
-        // ===== DELETE PLAYLIST =====
-        function deletePlaylist(playlistId) {
-            if (!confirm("Delete this playlist?")) return;
-
-            fetch(`${BASE}/api/playlists/${playlistId}?username=${currentUser}`, {
-                method: "DELETE"
-            })
-            .then(() => loadPlaylists())
-            .catch(err => {
-                alert("Failed to delete playlist.");
-                console.error(err);
-            });
-        }
-
-        // ===== REMOVE SONG FROM PLAYLIST =====
-        function removeSongFromPlaylist(playlistId, songId) {
-            fetch(`${BASE}/api/playlists/${playlistId}/songs/${songId}`, {
-                method: "DELETE"
-            })
-            .then(() => loadPlaylists())
-            .catch(err => {
-                alert("Failed to remove song.");
-                console.error(err);
-            });
-        }
-
-        // ===== ADD TO PLAYLIST MODAL =====
-        function openAddToPlaylist(songId, songTitle) {
-            selectedSongId = songId;
-            document.getElementById("modalSongName").textContent = songTitle;
-            document.getElementById("addToPlaylistModal").classList.add("active");
-
-            const optionsDiv = document.getElementById("playlistOptions");
-
-            if (userPlaylists.length === 0) {
-                optionsDiv.innerHTML = "<p style='color:#888;'>No playlists yet. Create one first!</p>";
-                return;
-            }
-
-            optionsDiv.innerHTML = userPlaylists.map(p => `
-                <div class="playlist-option">
-                    <span>${p.name}</span>
-                    <button onclick="addSongToPlaylist('${p.id}')">Add</button>
                 </div>
-            `).join("");
+            `;
+        }).join("");
+    }
+
+    function togglePlaylist(id) {
+        document.getElementById(id).classList.toggle("open");
+    }
+
+    // ===== CREATE PLAYLIST =====
+    function createPlaylist() {
+        const name = document.getElementById("newPlaylistName").value.trim();
+        if (!name) { alert("Please enter a playlist name."); return; }
+
+        fetch(`${BASE}/api/playlists/?username=${currentUser}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, isPrivate: false, songIds: [] })
+        })
+        .then(res => res.json())
+        .then(() => {
+            document.getElementById("newPlaylistName").value = "";
+            loadPlaylists();
+        })
+        .catch(() => alert("Failed to create playlist."));
+    }
+
+    // ===== DELETE PLAYLIST =====
+    function deletePlaylist(playlistId) {
+        if (!confirm("Delete this playlist?")) return;
+        fetch(`${BASE}/api/playlists/${playlistId}?username=${currentUser}`, { method: "DELETE" })
+            .then(() => loadPlaylists())
+            .catch(() => alert("Failed to delete playlist."));
+    }
+
+    // ===== REMOVE SONG FROM PLAYLIST =====
+    function removeSongFromPlaylist(playlistId, songId) {
+        fetch(`${BASE}/api/playlists/${playlistId}/songs/${songId}`, { method: "DELETE" })
+            .then(() => loadPlaylists())
+            .catch(() => alert("Failed to remove song."));
+    }
+
+    // ===== ADD TO PLAYLIST MODAL =====
+    function openAddToPlaylist(songId, songTitle) {
+        selectedSongId = songId;
+        document.getElementById("modalSongName").textContent = songTitle;
+        document.getElementById("addToPlaylistModal").classList.add("active");
+
+        const optionsDiv = document.getElementById("playlistOptions");
+        if (userPlaylists.length === 0) {
+            optionsDiv.innerHTML = "<p style='color:#888;'>No playlists yet. Create one in the Playlists tab first!</p>";
+            return;
         }
 
-        function closeModal() {
-            document.getElementById("addToPlaylistModal").classList.remove("active");
-            selectedSongId = null;
-        }
+        optionsDiv.innerHTML = userPlaylists.map(p => `
+            <div class="playlist-option">
+                <span>${p.name}</span>
+                <button onclick="addSongToPlaylist('${p.id}')">Add</button>
+            </div>
+        `).join("");
+    }
 
-        document.getElementById("addToPlaylistModal").addEventListener("click", function(e) {
-            if (e.target === this) closeModal();
-        });
+    function closeModal() {
+        document.getElementById("addToPlaylistModal").classList.remove("active");
+        selectedSongId = null;
+    }
 
-        function addSongToPlaylist(playlistId) {
-            if (!selectedSongId) return;
+    document.getElementById("addToPlaylistModal").addEventListener("click", function(e) {
+        if (e.target === this) closeModal();
+    });
 
-            fetch(`${BASE}/api/playlists/${playlistId}/songs/${selectedSongId}`, {
-                method: "PUT"
-            })
+    function addSongToPlaylist(playlistId) {
+        if (!selectedSongId) return;
+        fetch(`${BASE}/api/playlists/${playlistId}/songs/${selectedSongId}`, { method: "PUT" })
             .then(res => {
-                if (!res.ok) throw new Error("Failed");
+                if (!res.ok) throw new Error();
                 closeModal();
                 loadPlaylists();
                 alert("Song added to playlist!");
             })
-            .catch(err => {
-                alert("Failed to add song to playlist.");
-                console.error(err);
-            });
-        }
+            .catch(() => alert("Failed to add song to playlist."));
+    }
 
-        // ===== NAV =====
-        function goToProfile() {
-            window.location.href = "profile.html";
-        }
-
-        function logout() {
-            localStorage.removeItem("currentUser");
-            window.location.href = "index.html";
-        }
-    </script>
+    function logout() {
+        localStorage.removeItem("currentUser");
+        window.location.href = "index.html";
+    }
+</script>
 </body>
-
 </html>
