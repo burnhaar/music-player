@@ -20,345 +20,140 @@
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    min-height: 100vh;
-  }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
 
-  /* NAVBAR */
   .navbar {
-    background: #111;
-    border-bottom: 1px solid var(--border);
-    padding: 14px 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 100;
+    background: #111; border-bottom: 1px solid var(--border);
+    padding: 14px 24px; display: flex; justify-content: space-between; align-items: center;
+    position: sticky; top: 0; z-index: 100;
   }
-  .navbar-brand {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: 1.2rem;
-    color: var(--accent);
-    letter-spacing: -0.5px;
-  }
+  .navbar-brand { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.2rem; color: var(--accent); }
   .navbar-actions button {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 7px 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.85rem;
-    margin-left: 8px;
-    transition: all 0.2s;
+    background: var(--surface2); border: 1px solid var(--border); color: var(--text);
+    padding: 7px 16px; border-radius: 8px; cursor: pointer; font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem; margin-left: 8px; transition: all 0.2s;
   }
   .navbar-actions button:hover { background: var(--border); }
   .navbar-actions button.danger { color: var(--danger); border-color: var(--danger)33; }
   .navbar-actions button.danger:hover { background: var(--danger)22; }
 
-  /* MAIN LAYOUT */
-  .container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 40px 20px;
-  }
+  .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
 
   /* PROFILE HEADER */
-  .profile-header {
-    display: flex;
-    gap: 48px;
-    align-items: flex-start;
-    margin-bottom: 40px;
-    animation: fadeUp 0.5s ease both;
-  }
+  .profile-header { display: flex; gap: 48px; align-items: flex-start; margin-bottom: 32px; animation: fadeUp 0.5s ease both; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* AVATAR */
-  .avatar-wrap {
-    position: relative;
-    flex-shrink: 0;
-  }
-  .avatar {
-    width: 110px;
-    height: 110px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid var(--border);
-    display: block;
-    background: var(--surface2);
-  }
+  .avatar-wrap { position: relative; flex-shrink: 0; }
+  .avatar { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 3px solid var(--border); display: block; }
   .avatar-placeholder {
-    width: 110px;
-    height: 110px;
-    border-radius: 50%;
+    width: 110px; height: 110px; border-radius: 50%;
     background: linear-gradient(135deg, var(--accent)44, var(--accent2)44);
-    border: 3px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Syne', sans-serif;
-    font-size: 2.2rem;
-    font-weight: 800;
-    color: var(--accent);
+    border: 3px solid var(--border); display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800; color: var(--accent);
   }
   .avatar-edit-btn {
-    position: absolute;
-    bottom: 4px;
-    right: 4px;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: var(--accent);
-    border: 2px solid var(--bg);
-    color: white;
-    font-size: 0.75rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.2s;
+    position: absolute; bottom: 4px; right: 4px; width: 28px; height: 28px;
+    border-radius: 50%; background: var(--accent); border: 2px solid var(--bg);
+    color: white; font-size: 0.75rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; transition: transform 0.2s;
   }
   .avatar-edit-btn:hover { transform: scale(1.1); }
   #avatarInput { display: none; }
 
-  /* PROFILE INFO */
   .profile-info { flex: 1; }
-  .username-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 16px;
-    flex-wrap: wrap;
-  }
-  .username-display {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.6rem;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-  }
+  .username-row { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+  .username-display { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 700; }
+  .privacy-badge { font-size: 0.72rem; padding: 3px 10px; border-radius: 20px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
+  .privacy-badge.public { background: var(--success)22; color: var(--success); border: 1px solid var(--success)44; }
+  .privacy-badge.private { background: var(--muted)22; color: var(--muted); border: 1px solid var(--muted)44; }
   .edit-username-btn {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--muted);
-    padding: 5px 14px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 0.8rem;
-    font-family: 'DM Sans', sans-serif;
-    transition: all 0.2s;
+    background: var(--surface2); border: 1px solid var(--border); color: var(--muted);
+    padding: 5px 14px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-family: 'DM Sans', sans-serif; transition: all 0.2s;
   }
   .edit-username-btn:hover { color: var(--text); border-color: var(--accent); }
 
-  /* EDIT USERNAME FORM */
-  .edit-username-form {
-    display: none;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 16px;
-    flex-wrap: wrap;
-  }
+  .edit-username-form { display: none; align-items: center; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
   .edit-username-form.active { display: flex; }
-  .edit-username-form input {
-    background: var(--surface2);
-    border: 1px solid var(--accent);
-    color: var(--text);
-    padding: 8px 14px;
-    border-radius: 8px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.95rem;
-    outline: none;
-    width: 200px;
-  }
-  .edit-username-form button {
-    padding: 8px 16px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.85rem;
-    transition: opacity 0.2s;
-  }
+  .edit-username-form input { background: var(--surface2); border: 1px solid var(--accent); color: var(--text); padding: 8px 14px; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; outline: none; width: 200px; }
+  .edit-username-form button { padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; }
   .btn-save { background: var(--accent); color: white; }
   .btn-cancel { background: var(--surface2); color: var(--muted); border: 1px solid var(--border) !important; }
-  .edit-username-form button:hover { opacity: 0.85; }
   #editMsg { font-size: 0.8rem; margin-top: 4px; }
 
-  /* STATS ROW */
-  .stats-row {
-    display: flex;
-    gap: 32px;
-    margin-bottom: 16px;
-  }
+  .stats-row { display: flex; gap: 32px; margin-bottom: 16px; }
   .stat { text-align: center; cursor: default; }
   .stat.clickable { cursor: pointer; }
   .stat.clickable:hover .stat-label { color: var(--accent); }
-  .stat-num {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.3rem;
-    font-weight: 700;
-  }
-  .stat-label {
-    font-size: 0.8rem;
-    color: var(--muted);
-    transition: color 0.2s;
-  }
+  .stat-num { font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 700; }
+  .stat-label { font-size: 0.8rem; color: var(--muted); transition: color 0.2s; }
 
-  /* DIVIDER */
-  .divider {
-    border: none;
-    border-top: 1px solid var(--border);
-    margin: 32px 0;
+  /* TABS */
+  .profile-tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 32px; flex-wrap: wrap; }
+  .profile-tab-btn {
+    background: none; border: none; color: var(--muted); font-size: 0.88rem; font-weight: 600;
+    padding: 10px 18px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px;
+    font-family: 'DM Sans', sans-serif; transition: all 0.2s; text-transform: uppercase; letter-spacing: 0.04em;
   }
+  .profile-tab-btn:hover { color: var(--text); }
+  .profile-tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .profile-tab-content { display: none; }
+  .profile-tab-content.active { display: block; }
 
-  /* FRIENDS SECTION */
-  .section-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 1rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 20px;
-  }
+  .section-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
 
-  .friends-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 16px;
-  }
+  /* FOLLOWER GRID */
+  .followers-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 16px; }
+  .follower-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px 12px; text-align: center; cursor: pointer; transition: all 0.2s; }
+  .follower-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(79,142,247,0.12); }
+  .follower-avatar { width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, var(--accent)55, var(--accent2)55); margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.2rem; color: var(--accent); overflow: hidden; }
+  .follower-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .follower-name { font-size: 0.85rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .unfollow-btn { margin-top: 8px; width: 100%; background: var(--danger)22; color: var(--danger); border: 1px solid var(--danger)44; border-radius: 6px; padding: 4px 0; font-size: 0.75rem; cursor: pointer; font-family: 'DM Sans', sans-serif; }
 
-  .friend-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 20px 12px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.2s;
-    animation: fadeUp 0.4s ease both;
-  }
-  .friend-card:hover {
-    border-color: var(--accent);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 24px rgba(79,142,247,0.12);
-  }
-  .friend-avatar {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent)55, var(--accent2)55);
-    margin: 0 auto 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 1.2rem;
-    color: var(--accent);
-    overflow: hidden;
-  }
-  .friend-avatar img { width: 100%; height: 100%; object-fit: cover; }
-  .friend-name {
-    font-size: 0.85rem;
-    font-weight: 500;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+  /* FIND / SEARCH */
+  .search-input { background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 10px 16px; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; outline: none; width: 100%; max-width: 360px; transition: border-color 0.2s; margin-bottom: 20px; }
+  .search-input:focus { border-color: var(--accent); }
+  .user-result { display: flex; justify-content: space-between; align-items: center; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; margin-bottom: 8px; }
+  .follow-btn { padding: 6px 16px; border-radius: 8px; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 600; transition: opacity 0.2s; }
+  .follow-btn:hover { opacity: 0.85; }
+  .follow-btn.follow { background: var(--accent); color: white; }
+  .follow-btn.requested { background: var(--surface2); color: var(--muted); border: 1px solid var(--border); }
+  .follow-btn.following { background: var(--danger)22; color: var(--danger); border: 1px solid var(--danger)44; }
+
+  /* REQUESTS */
+  .request-card { display: flex; justify-content: space-between; align-items: center; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; margin-bottom: 8px; }
+  .request-actions { display: flex; gap: 8px; }
+  .btn-approve { background: var(--success)22; color: var(--success); border: 1px solid var(--success)44; padding: 5px 14px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; }
+  .btn-reject { background: var(--danger)22; color: var(--danger); border: 1px solid var(--danger)44; padding: 5px 14px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; }
+
+  /* SETTINGS */
+  .settings-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-bottom: 20px; }
+  .settings-card h3 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 16px; }
+  .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .toggle-row:last-child { border-bottom: none; }
+  .toggle-label { font-size: 0.95rem; }
+  .toggle-sub { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+  .toggle-switch { position: relative; width: 48px; height: 26px; }
+  .toggle-switch input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider { position: absolute; cursor: pointer; inset: 0; background: var(--border); border-radius: 26px; transition: 0.3s; }
+  .toggle-slider:before { content: ""; position: absolute; height: 18px; width: 18px; left: 4px; bottom: 4px; background: white; border-radius: 50%; transition: 0.3s; }
+  .toggle-switch input:checked + .toggle-slider { background: var(--accent); }
+  .toggle-switch input:checked + .toggle-slider:before { transform: translateX(22px); }
 
   /* MODAL */
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.75);
-    z-index: 200;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(4px);
-  }
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 200; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
   .modal-overlay.active { display: flex; }
-  .modal {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 32px;
-    width: 90%;
-    max-width: 420px;
-    animation: fadeUp 0.3s ease both;
-    position: relative;
-  }
-  .modal-close {
-    position: absolute;
-    top: 16px; right: 16px;
-    background: none;
-    border: none;
-    color: var(--muted);
-    font-size: 1.3rem;
-    cursor: pointer;
-    line-height: 1;
-  }
+  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 32px; width: 90%; max-width: 420px; position: relative; }
+  .modal-close { position: absolute; top: 16px; right: 16px; background: none; border: none; color: var(--muted); font-size: 1.3rem; cursor: pointer; }
   .modal-close:hover { color: var(--text); }
-  .modal-avatar {
-    width: 72px; height: 72px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent)55, var(--accent2)55);
-    margin: 0 auto 16px;
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Syne', sans-serif;
-    font-size: 1.6rem; font-weight: 700; color: var(--accent);
-    overflow: hidden;
-  }
+  .modal-avatar { width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, var(--accent)55, var(--accent2)55); margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 700; color: var(--accent); overflow: hidden; }
   .modal-avatar img { width: 100%; height: 100%; object-fit: cover; }
-  .modal-username {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.3rem; font-weight: 700;
-    text-align: center; margin-bottom: 20px;
-  }
-  .modal-stats {
-    display: flex; gap: 24px; justify-content: center;
-    border-top: 1px solid var(--border);
-    padding-top: 20px;
-  }
+  .modal-username { font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 700; text-align: center; margin-bottom: 20px; }
+  .modal-stats { display: flex; gap: 24px; justify-content: center; border-top: 1px solid var(--border); padding-top: 20px; }
 
-  /* EMPTY STATE */
-  .empty {
-    color: var(--muted);
-    font-size: 0.9rem;
-    padding: 32px;
-    text-align: center;
-    border: 1px dashed var(--border);
-    border-radius: 12px;
-  }
+  .empty { color: var(--muted); font-size: 0.9rem; padding: 32px; text-align: center; border: 1px dashed var(--border); border-radius: 12px; }
 
-  /* LOADING */
-  .loading { color: var(--muted); font-size: 0.9rem; padding: 20px 0; }
-
-  /* TOAST */
-  .toast {
-    position: fixed;
-    bottom: 24px; left: 50%;
-    transform: translateX(-50%) translateY(80px);
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 12px 24px;
-    border-radius: 10px;
-    font-size: 0.9rem;
-    z-index: 300;
-    transition: transform 0.3s ease;
-    pointer-events: none;
-  }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 12px 24px; border-radius: 10px; font-size: 0.9rem; z-index: 300; transition: transform 0.3s ease; pointer-events: none; }
   .toast.show { transform: translateX(-50%) translateY(0); }
   .toast.success { border-color: var(--success); color: var(--success); }
   .toast.error { border-color: var(--danger); color: var(--danger); }
@@ -366,7 +161,6 @@
 </head>
 <body>
 
-<!-- NAVBAR -->
 <div class="navbar">
   <div class="navbar-brand">🎵 MusicPlayer</div>
   <div class="navbar-actions">
@@ -376,13 +170,10 @@
   </div>
 </div>
 
-<!-- MAIN -->
 <div class="container">
 
   <!-- PROFILE HEADER -->
   <div class="profile-header">
-
-    <!-- AVATAR -->
     <div class="avatar-wrap">
       <div class="avatar-placeholder" id="avatarPlaceholder">?</div>
       <img class="avatar" id="avatarImg" style="display:none;" src="" alt="avatar">
@@ -390,16 +181,12 @@
       <input type="file" id="avatarInput" accept="image/*" onchange="handleAvatarChange(event)">
     </div>
 
-    <!-- INFO -->
     <div class="profile-info">
-
-      <!-- USERNAME ROW -->
       <div class="username-row" id="usernameRow">
         <span class="username-display" id="usernameDisplay">Loading...</span>
+        <span class="privacy-badge" id="privacyBadge"></span>
         <button class="edit-username-btn" onclick="toggleEditUsername()">Edit username</button>
       </div>
-
-      <!-- EDIT FORM -->
       <div class="edit-username-form" id="editUsernameForm">
         <input type="text" id="newUsernameInput" placeholder="New username">
         <button class="btn-save" onclick="saveUsername()">Save</button>
@@ -407,164 +194,317 @@
       </div>
       <p id="editMsg"></p>
 
-      <!-- STATS -->
       <div class="stats-row">
         <div class="stat">
           <div class="stat-num" id="songCount">—</div>
           <div class="stat-label">songs saved</div>
         </div>
-        <div class="stat clickable" onclick="scrollToFriends()">
-          <div class="stat-num" id="friendCount">—</div>
-          <div class="stat-label">friends</div>
+        <div class="stat clickable" onclick="switchProfileTab('followers', document.getElementById('tab-btn-followers'))">
+          <div class="stat-num" id="followerCount">—</div>
+          <div class="stat-label">followers</div>
+        </div>
+        <div class="stat clickable" onclick="switchProfileTab('following', document.getElementById('tab-btn-following'))">
+          <div class="stat-num" id="followingCount">—</div>
+          <div class="stat-label">following</div>
         </div>
       </div>
-
     </div>
   </div>
 
-  <hr class="divider">
+  <!-- TABS -->
+  <div class="profile-tabs">
+    <button class="profile-tab-btn active" id="tab-btn-followers" onclick="switchProfileTab('followers', this)">Followers</button>
+    <button class="profile-tab-btn" id="tab-btn-following" onclick="switchProfileTab('following', this)">Following</button>
+    <button class="profile-tab-btn" id="tab-btn-requests" onclick="switchProfileTab('requests', this)">Requests <span id="requestBadge"></span></button>
+    <button class="profile-tab-btn" onclick="switchProfileTab('find', this)">Find Users</button>
+    <button class="profile-tab-btn" onclick="switchProfileTab('settings', this)">⚙️ Settings</button>
+  </div>
 
-  <!-- FRIENDS -->
+  <!-- FOLLOWERS -->
+  <div class="profile-tab-content active" id="tab-followers">
+    <div class="section-title">Followers</div>
+    <div class="followers-grid" id="followersGrid"><p style="color:var(--muted)">Loading...</p></div>
+  </div>
 
-  <!-- FIND FRIENDS -->
-<div style="margin-bottom: 28px;">
-    <div class="section-title">Find Friends</div>
-    <div style="display:flex; gap:10px; margin-bottom:16px;">
-        <input type="text" id="friendSearch" placeholder="Search by username..."
-            oninput="searchUsers()"
-            style="padding:8px 12px;border-radius:6px;border:1px solid #2a2a2a;
-                   background:#1f1f1f;color:#f0f0f0;font-size:14px;width:280px;outline:none;">
-    </div>
+  <!-- FOLLOWING -->
+  <div class="profile-tab-content" id="tab-following">
+    <div class="section-title">Following</div>
+    <div class="followers-grid" id="followingGrid"><p style="color:var(--muted)">Loading...</p></div>
+  </div>
+
+  <!-- REQUESTS -->
+  <div class="profile-tab-content" id="tab-requests">
+    <div class="section-title">Follow Requests</div>
+    <div id="requestsList"><p style="color:var(--muted)">Loading...</p></div>
+  </div>
+
+  <!-- FIND USERS -->
+  <div class="profile-tab-content" id="tab-find">
+    <div class="section-title">Find Users</div>
+    <input type="text" class="search-input" placeholder="Search by username..." oninput="searchUsers(this.value)">
     <div id="searchResults"></div>
-</div>
-  <div id="friendsSection">
-    <div class="section-title">Friends</div>
-    <div class="friends-grid" id="friendsGrid">
-      <div class="loading">Loading friends...</div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="profile-tab-content" id="tab-settings">
+    <div class="settings-card">
+      <h3>Account Privacy</h3>
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label">Private Account</div>
+          <div class="toggle-sub">When on, new followers must be approved by you. Public accounts auto-approve follow requests.</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="privacyToggle" onchange="updatePrivacy(this.checked)">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
     </div>
   </div>
 
 </div>
 
-<!-- FRIEND PROFILE MODAL -->
-<div class="modal-overlay" id="friendModal">
+<!-- USER MODAL -->
+<div class="modal-overlay" id="userModal">
   <div class="modal">
-    <button class="modal-close" onclick="closeFriendModal()">✕</button>
+    <button class="modal-close" onclick="closeUserModal()">✕</button>
     <div class="modal-avatar" id="modalAvatar"></div>
     <div class="modal-username" id="modalUsername"></div>
     <div class="modal-stats">
       <div class="stat">
-        <div class="stat-num" id="modalSongs">—</div>
-        <div class="stat-label">songs saved</div>
+        <div class="stat-num" id="modalFollowers">—</div>
+        <div class="stat-label">followers</div>
       </div>
       <div class="stat">
-        <div class="stat-num" id="modalFriends">—</div>
-        <div class="stat-label">friends</div>
+        <div class="stat-num" id="modalFollowing">—</div>
+        <div class="stat-label">following</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
 const BASE = "https://music-player-m56j.onrender.com";
 let currentUser = localStorage.getItem("currentUser");
-let friends = [];
-
 if (!currentUser) window.location.href = "index.html";
 
-function searchUsers() {
-    const query = document.getElementById("friendSearch").value.trim();
-    const resultsDiv = document.getElementById("searchResults");
+let myFollowers = [];
+let myFollowing = [];
+let myPending = [];
+let isPrivateAccount = false;
 
-    if (!query) { resultsDiv.innerHTML = ""; return; }
-
-    fetch(`${BASE}/api/users/search?query=${encodeURIComponent(query)}`)
-        .then(res => res.json())
-        .then(users => {
-            const others = users.filter(u => u.username !== currentUser);
-            if (others.length === 0) {
-                resultsDiv.innerHTML = "<p style='color:#888;font-size:0.9rem;'>No users found.</p>";
-                return;
-            }
-
-            resultsDiv.innerHTML = others.map(u => {
-                const isFriend = friends.includes(u.username);
-                return `
-                    <div style="display:flex;justify-content:space-between;align-items:center;
-                                background:#1f1f1f;border:1px solid #2a2a2a;border-radius:10px;
-                                padding:10px 16px;margin-bottom:8px;">
-                        <span style="font-weight:500;">${u.username}</span>
-                        ${isFriend
-                            ? `<button onclick="removeFriend('${u.username}')"
-                                style="background:#e74c3c;color:white;border:none;border-radius:6px;
-                                       padding:5px 12px;cursor:pointer;font-size:13px;">Unfriend</button>`
-                            : `<button onclick="addFriend('${u.username}')"
-                                style="background:#4f8ef7;color:white;border:none;border-radius:6px;
-                                       padding:5px 12px;cursor:pointer;font-size:13px;">+ Add Friend</button>`
-                        }
-                    </div>
-                `;
-            }).join("");
-        })
-        .catch(() => {
-            resultsDiv.innerHTML = "<p style='color:#888;'>Search failed.</p>";
-        });
-}
-
-function addFriend(friendUsername) {
-    fetch(`${BASE}/api/users/${currentUser}/friends/add/${friendUsername}`, { method: "PATCH" })
-        .then(res => res.text())
-        .then(data => {
-            showToast(data, "success");
-            friends.push(friendUsername);
-            document.getElementById("friendCount").textContent = friends.length;
-            loadFriends();
-            searchUsers(); // refresh search results
-        })
-        .catch(() => showToast("Failed to add friend.", "error"));
-}
-
-function removeFriend(friendUsername) {
-    fetch(`${BASE}/api/users/${currentUser}/friends/remove/${friendUsername}`, { method: "PATCH" })
-        .then(res => res.text())
-        .then(data => {
-            showToast(data, "success");
-            friends = friends.filter(f => f !== friendUsername);
-            document.getElementById("friendCount").textContent = friends.length;
-            loadFriends();
-            searchUsers();
-        })
-        .catch(() => showToast("Failed to remove friend.", "error"));
-}
-
-// ===== INIT =====
 window.onload = async function() {
   document.getElementById("usernameDisplay").textContent = currentUser;
   document.getElementById("avatarPlaceholder").textContent = currentUser.charAt(0).toUpperCase();
   document.getElementById("newUsernameInput").value = currentUser;
-
   loadAvatar();
-  loadSongCount();
-  loadFriends();
+  loadUserData();
 };
+
+// ===== LOAD USER DATA =====
+function loadUserData() {
+  fetch(`${BASE}/api/users/${currentUser}`)
+    .then(r => r.json())
+    .then(user => {
+      myFollowers = user.followers || [];
+      myFollowing = user.following || [];
+      myPending = user.pendingRequests || [];
+      isPrivateAccount = user.isPrivate || false;
+
+      document.getElementById("songCount").textContent = (user.favoritedSongIds || []).length;
+      document.getElementById("followerCount").textContent = myFollowers.length;
+      document.getElementById("followingCount").textContent = myFollowing.length;
+
+      const badge = document.getElementById("privacyBadge");
+      badge.textContent = isPrivateAccount ? "🔒 Private" : "🌐 Public";
+      badge.className = "privacy-badge " + (isPrivateAccount ? "private" : "public");
+
+      document.getElementById("privacyToggle").checked = isPrivateAccount;
+
+      const reqBadge = document.getElementById("requestBadge");
+      reqBadge.textContent = myPending.length > 0 ? `(${myPending.length})` : "";
+
+      renderFollowers(myFollowers);
+      renderFollowing(myFollowing);
+      renderRequests(myPending);
+    })
+    .catch(e => console.error(e));
+}
+
+// ===== TABS =====
+function switchProfileTab(tab, btn) {
+  document.querySelectorAll(".profile-tab-btn").forEach(b => b.classList.remove("active"));
+  document.querySelectorAll(".profile-tab-content").forEach(c => c.classList.remove("active"));
+  document.getElementById("tab-" + tab).classList.add("active");
+  if (btn) btn.classList.add("active");
+}
+
+// ===== RENDER FOLLOWERS =====
+function renderFollowers(list) {
+  const grid = document.getElementById("followersGrid");
+  if (!list || list.length === 0) { grid.innerHTML = '<div class="empty">No followers yet.</div>'; return; }
+  grid.innerHTML = list.map(name => {
+    const av = localStorage.getItem("avatar_" + name);
+    return `
+      <div class="follower-card" onclick="openUserModal('${name}')">
+        <div class="follower-avatar">${av ? `<img src="${av}">` : name.charAt(0).toUpperCase()}</div>
+        <div class="follower-name">${name}</div>
+      </div>`;
+  }).join("");
+}
+
+// ===== RENDER FOLLOWING =====
+function renderFollowing(list) {
+  const grid = document.getElementById("followingGrid");
+  if (!list || list.length === 0) { grid.innerHTML = '<div class="empty">Not following anyone yet.</div>'; return; }
+  grid.innerHTML = list.map(name => {
+    const av = localStorage.getItem("avatar_" + name);
+    return `
+      <div class="follower-card">
+        <div class="follower-avatar" onclick="openUserModal('${name}')">${av ? `<img src="${av}">` : name.charAt(0).toUpperCase()}</div>
+        <div class="follower-name">${name}</div>
+        <button class="unfollow-btn" onclick="unfollowUser('${name}')">Unfollow</button>
+      </div>`;
+  }).join("");
+}
+
+// ===== RENDER REQUESTS =====
+function renderRequests(list) {
+  const div = document.getElementById("requestsList");
+  if (!list || list.length === 0) { div.innerHTML = '<div class="empty">No pending follow requests.</div>'; return; }
+  div.innerHTML = list.map(name => `
+    <div class="request-card">
+      <span style="font-weight:500;">${name}</span>
+      <div class="request-actions">
+        <button class="btn-approve" onclick="approveRequest('${name}')">✓ Approve</button>
+        <button class="btn-reject" onclick="rejectRequest('${name}')">✕ Reject</button>
+      </div>
+    </div>`).join("");
+}
+
+// ===== APPROVE / REJECT =====
+function approveRequest(requester) {
+  fetch(`${BASE}/api/users/${currentUser}/requests/approve/${requester}`, { method: "POST" })
+    .then(r => r.text())
+    .then(() => { showToast(`Approved ${requester}`, "success"); loadUserData(); })
+    .catch(() => showToast("Failed to approve.", "error"));
+}
+
+function rejectRequest(requester) {
+  fetch(`${BASE}/api/users/${currentUser}/requests/reject/${requester}`, { method: "DELETE" })
+    .then(r => r.text())
+    .then(() => { showToast(`Rejected ${requester}`, ""); loadUserData(); })
+    .catch(() => showToast("Failed to reject.", "error"));
+}
+
+// ===== UNFOLLOW =====
+function unfollowUser(targetUsername) {
+  fetch(`${BASE}/api/users/${currentUser}/follow/${targetUsername}`, { method: "DELETE" })
+    .then(r => r.text())
+    .then(() => { showToast(`Unfollowed ${targetUsername}`, ""); loadUserData(); })
+    .catch(() => showToast("Failed to unfollow.", "error"));
+}
+
+// ===== SEARCH USERS =====
+function searchUsers(query) {
+  const div = document.getElementById("searchResults");
+  if (!query.trim()) { div.innerHTML = ""; return; }
+
+  fetch(`${BASE}/api/users/search?query=${encodeURIComponent(query)}`)
+    .then(r => r.json())
+    .then(users => {
+      const others = users.filter(u => u.username !== currentUser);
+      if (others.length === 0) { div.innerHTML = "<p style='color:var(--muted);'>No users found.</p>"; return; }
+
+      div.innerHTML = others.map(u => {
+        const isFollowing = myFollowing.includes(u.username);
+        const isPending = (u.pendingRequests || []).includes(currentUser);
+        let btnClass = "follow", btnText = "+ Follow";
+        if (isFollowing) { btnClass = "following"; btnText = "Following"; }
+        else if (isPending) { btnClass = "requested"; btnText = "Requested"; }
+
+        return `
+          <div class="user-result">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent)44,var(--accent2)44);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--accent);">
+                ${u.username.charAt(0).toUpperCase()}
+              </div>
+              <div>
+                <div style="font-weight:500;">${u.username}</div>
+                <div style="font-size:0.78rem;color:var(--muted);">${u.isPrivate ? '🔒 Private' : '🌐 Public'}</div>
+              </div>
+            </div>
+            <button class="follow-btn ${btnClass}" onclick="followUser('${u.username}', this)">${btnText}</button>
+          </div>`;
+      }).join("");
+    })
+    .catch(() => { div.innerHTML = "<p style='color:var(--muted);'>Search failed.</p>"; });
+}
+
+// ===== FOLLOW =====
+function followUser(targetUsername, btn) {
+  if (myFollowing.includes(targetUsername)) { unfollowUser(targetUsername); return; }
+
+  fetch(`${BASE}/api/users/${currentUser}/follow/${targetUsername}`, { method: "POST" })
+    .then(r => r.text())
+    .then(data => {
+      if (data === "Now following.") {
+        myFollowing.push(targetUsername);
+        btn.className = "follow-btn following"; btn.textContent = "Following";
+        showToast(`Now following ${targetUsername}!`, "success");
+      } else if (data === "Follow request sent.") {
+        btn.className = "follow-btn requested"; btn.textContent = "Requested";
+        showToast("Follow request sent!", "success");
+      } else { showToast(data, ""); }
+      loadUserData();
+    })
+    .catch(() => showToast("Failed to follow.", "error"));
+}
+
+// ===== PRIVACY =====
+function updatePrivacy(isPrivate) {
+  fetch(`${BASE}/api/users/${currentUser}/privacy?isPrivate=${isPrivate}`, { method: "PATCH" })
+    .then(r => r.text())
+    .then(data => {
+      isPrivateAccount = isPrivate;
+      const badge = document.getElementById("privacyBadge");
+      badge.textContent = isPrivate ? "🔒 Private" : "🌐 Public";
+      badge.className = "privacy-badge " + (isPrivate ? "private" : "public");
+      showToast(data, "success");
+    })
+    .catch(() => showToast("Failed to update privacy.", "error"));
+}
+
+// ===== USER MODAL =====
+function openUserModal(username) {
+  document.getElementById("modalUsername").textContent = username;
+  const av = localStorage.getItem("avatar_" + username);
+  document.getElementById("modalAvatar").innerHTML = av ? `<img src="${av}">` : username.charAt(0).toUpperCase();
+  document.getElementById("modalFollowers").textContent = "—";
+  document.getElementById("modalFollowing").textContent = "—";
+  document.getElementById("userModal").classList.add("active");
+
+  fetch(`${BASE}/api/users/${username}`)
+    .then(r => r.json())
+    .then(u => {
+      document.getElementById("modalFollowers").textContent = (u.followers || []).length;
+      document.getElementById("modalFollowing").textContent = (u.following || []).length;
+    }).catch(() => {});
+}
+
+function closeUserModal() { document.getElementById("userModal").classList.remove("active"); }
+document.getElementById("userModal").addEventListener("click", function(e) { if (e.target === this) closeUserModal(); });
 
 // ===== AVATAR =====
 function loadAvatar() {
   const saved = localStorage.getItem("avatar_" + currentUser);
   if (saved) {
-    showAvatar(saved);
+    document.getElementById("avatarImg").src = saved;
+    document.getElementById("avatarImg").style.display = "block";
+    document.getElementById("avatarPlaceholder").style.display = "none";
   }
-}
-
-function showAvatar(src) {
-  const img = document.getElementById("avatarImg");
-  const placeholder = document.getElementById("avatarPlaceholder");
-  img.src = src;
-  img.style.display = "block";
-  placeholder.style.display = "none";
 }
 
 function handleAvatarChange(event) {
@@ -574,164 +514,53 @@ function handleAvatarChange(event) {
   reader.onload = function(e) {
     const dataUrl = e.target.result;
     localStorage.setItem("avatar_" + currentUser, dataUrl);
-    showAvatar(dataUrl);
+    document.getElementById("avatarImg").src = dataUrl;
+    document.getElementById("avatarImg").style.display = "block";
+    document.getElementById("avatarPlaceholder").style.display = "none";
     showToast("Profile picture updated!", "success");
-
-    // TODO: upload to backend
-    // fetch(`${BASE}/api/users/${currentUser}/avatar`, { method: "POST", body: formData })
   };
   reader.readAsDataURL(file);
 }
-
-// ===== SONG COUNT =====
-function loadSongCount() {
-  fetch(`${BASE}/api/users/${currentUser}`)
-    .then(res => res.json())
-    .then(data => {
-      const count = data.favoritedSongIds ? data.favoritedSongIds.length : 0;
-      document.getElementById("songCount").textContent = count;
-    })
-    .catch(() => {
-      document.getElementById("songCount").textContent = "0";
-    });
-}
-
-// ===== FRIENDS =====
-function loadFriends() {
-    fetch(`${BASE}/api/users/${currentUser}/friends`)
-        .then(res => res.json())
-        .then(data => {
-            friends = data;
-            document.getElementById("friendCount").textContent = friends.length;
-            renderFriends(friends);
-        })
-        .catch(() => {});
-}
-
-function renderFriends(friends) {
-  const grid = document.getElementById("friendsGrid");
-  if (!friends || friends.length === 0) {
-    grid.innerHTML = '<div class="empty">No friends yet.</div>';
-    return;
-  }
-
-  grid.innerHTML = friends.map((f, i) => {
-    const name = typeof f === "string" ? f : f.username;
-    const initial = name.charAt(0).toUpperCase();
-    const savedAvatar = localStorage.getItem("avatar_" + name);
-    const avatarHtml = savedAvatar
-      ? `<img src="${savedAvatar}" alt="${name}">`
-      : initial;
-
-    return `
-      <div class="friend-card" style="animation-delay:${i * 0.05}s" onclick="openFriendModal('${name}')">
-        <div class="friend-avatar">${avatarHtml}</div>
-        <div class="friend-name">${name}</div>
-      </div>
-    `;
-  }).join("");
-}
-
-// ===== FRIEND MODAL =====
-function openFriendModal(username) {
-  document.getElementById("modalUsername").textContent = username;
-  const initial = username.charAt(0).toUpperCase();
-  const savedAvatar = localStorage.getItem("avatar_" + username);
-  const avatarEl = document.getElementById("modalAvatar");
-  avatarEl.innerHTML = savedAvatar ? `<img src="${savedAvatar}" alt="${username}">` : initial;
-
-  document.getElementById("modalSongs").textContent = "—";
-  document.getElementById("modalFriends").textContent = "—";
-
-  document.getElementById("friendModal").classList.add("active");
-
-  // Load their song count
-  fetch(`${BASE}/api/songs`)
-    .then(res => res.json())
-    .then(data => {
-      document.getElementById("modalSongs").textContent = data.length;
-    }).catch(() => {});
-
-  // Load their friends count
-  fetch(`${BASE}/api/users/${username}/friends`)
-    .then(res => res.json())
-    .then(friends => {
-      document.getElementById("modalFriends").textContent = friends.length;
-    }).catch(() => {});
-}
-
-function closeFriendModal() {
-  document.getElementById("friendModal").classList.remove("active");
-}
-
-// Close modal on overlay click
-document.getElementById("friendModal").addEventListener("click", function(e) {
-  if (e.target === this) closeFriendModal();
-});
 
 // ===== EDIT USERNAME =====
 function toggleEditUsername() {
   const form = document.getElementById("editUsernameForm");
   const row = document.getElementById("usernameRow");
   const isActive = form.classList.contains("active");
-
   form.classList.toggle("active");
   row.style.display = isActive ? "flex" : "none";
   document.getElementById("editMsg").textContent = "";
-
-  if (!isActive) {
-    document.getElementById("newUsernameInput").value = currentUser;
-    document.getElementById("newUsernameInput").focus();
-  }
+  if (!isActive) { document.getElementById("newUsernameInput").value = currentUser; document.getElementById("newUsernameInput").focus(); }
 }
 
 function saveUsername() {
   const newUsername = document.getElementById("newUsernameInput").value.trim();
   const msgEl = document.getElementById("editMsg");
-
   if (!newUsername) { msgEl.style.color = "var(--danger)"; msgEl.textContent = "Username cannot be empty."; return; }
   if (newUsername === currentUser) { toggleEditUsername(); return; }
 
   fetch(`${BASE}/api/users/${currentUser}/username`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    method: "PUT", headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ newUsername })
   })
-  .then(res => res.text())
+  .then(r => r.text())
   .then(data => {
-    if (data.toLowerCase().includes("success") || data.toLowerCase().includes("updated")) {
-      // Transfer avatar to new username key
-      const avatar = localStorage.getItem("avatar_" + currentUser);
-      if (avatar) {
-        localStorage.setItem("avatar_" + newUsername, avatar);
-        localStorage.removeItem("avatar_" + currentUser);
-      }
+    if (data.toLowerCase().includes("updated")) {
+      const av = localStorage.getItem("avatar_" + currentUser);
+      if (av) { localStorage.setItem("avatar_" + newUsername, av); localStorage.removeItem("avatar_" + currentUser); }
       localStorage.setItem("currentUser", newUsername);
       currentUser = newUsername;
       document.getElementById("usernameDisplay").textContent = newUsername;
       document.getElementById("avatarPlaceholder").textContent = newUsername.charAt(0).toUpperCase();
       toggleEditUsername();
       showToast("Username updated!", "success");
-    } else {
-      msgEl.style.color = "var(--danger)";
-      msgEl.textContent = data;
-    }
+    } else { msgEl.style.color = "var(--danger)"; msgEl.textContent = data; }
   })
-  .catch(() => {
-    msgEl.style.color = "var(--danger)";
-    msgEl.textContent = "Error updating username.";
-  });
+  .catch(() => { msgEl.style.color = "var(--danger)"; msgEl.textContent = "Error updating username."; });
 }
 
 // ===== HELPERS =====
-function scrollToFriends() {
-  document.getElementById("friendsSection").scrollIntoView({ behavior: "smooth" });
-}
-
-function logout() {
-  localStorage.removeItem("currentUser");
-  window.location.href = "index.html";
-}
+function logout() { localStorage.removeItem("currentUser"); window.location.href = "index.html"; }
 
 function showToast(msg, type = "") {
   const toast = document.getElementById("toast");
@@ -740,6 +569,5 @@ function showToast(msg, type = "") {
   setTimeout(() => toast.className = "toast " + type, 3000);
 }
 </script>
-
 </body>
 </html>
